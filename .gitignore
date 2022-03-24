@@ -1,0 +1,9 @@
+**/build*
+**/.vscode
+**/null.d
+**/__pycache__
+**/*.pro.user
+**/.qt_for_python
+**/*.app
+Tools/device_firmwares/
+

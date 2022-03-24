@@ -1,0 +1,116 @@
+{
+   "Wave": {
+      "properties": {
+         "note": {
+            "size": 1,
+            "dataType": {
+               "in_build": true,
+               "type": "int"
+            },
+            "default": 36
+         },
+         "shape": {
+            "size": 1,
+            "dataType": {
+               "in_build": true,
+               "type": "int"
+            },
+            "default": 0
+         }
+      },
+      "functions": {}
+   },
+   "Input": {
+      "properties": {
+         "cvs": {
+            "size": 4,
+            "dataType": {
+               "in_build": true,
+               "type": "float"
+            },
+            "default": 0.0
+         },
+         "gates": {
+            "size": 2,
+            "dataType": {
+               "in_build": true,
+               "type": "bool"
+            },
+            "default": null
+         },
+         "waves": {
+            "size": 4,
+            "dataType": {
+               "in_build": false,
+               "type": "Wave"
+            },
+            "default": null
+         }
+      },
+      "functions": {}
+   },
+   "Output": {
+      "properties": {
+         "cvs": {
+            "size": 2,
+            "dataType": {
+               "in_build": true,
+               "type": "float"
+            },
+            "default": 0.0
+         },
+         "gate": {
+            "size": 1,
+            "dataType": {
+               "in_build": true,
+               "type": "bool"
+            },
+            "default": false
+         },
+         "led": {
+            "size": 1,
+            "dataType": {
+               "in_build": true,
+               "type": "bool"
+            },
+            "default": false
+         }
+      },
+      "functions": {}
+   },
+   "Imposter": {
+      "properties": {},
+      "functions": {
+         "fillInput": {
+            "out": {
+               "in_build": false,
+               "type": "Input"
+            },
+            "in": [
+               {
+                  "name": "test",
+                  "dataType": {
+                     "in_build": true,
+                     "type": "int"
+                  }
+               }
+            ]
+         },
+         "loopDone": {
+            "out": {
+               "in_build": true,
+               "type": null
+            },
+            "in": [
+               {
+                  "name": "output",
+                  "dataType": {
+                     "in_build": false,
+                     "type": "Output"
+                  }
+               }
+            ]
+         }
+      }
+   }
+}

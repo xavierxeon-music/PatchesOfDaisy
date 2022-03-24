@@ -1,0 +1,36 @@
+[submodule "Base/MusicTools"]
+	path = Base/Common/MusicTools
+	url = https://github.com/xavierxeon-music/MusicTools.git
+[submodule "Base/Remember"]
+	path = Base/Common/Remember
+	url = https://github.com/xavierxeon-helper/Remember.git
+[submodule "Base/Common/JSONTools"]
+	path = Base/Common/JSONTools
+	url = https://github.com/xavierxeon-helper/JSONTools.git
+[submodule "Base/Common/AudioDevice/portaudio"]
+	path = Base/Common/AudioDevice/portaudio/source
+	url = https://github.com/PortAudio/portaudio.git
+[submodule "base/libDaisy"]
+	path = Base/libDaisy
+	url = https://github.com/electro-smith/libDaisy.git
+[submodule "Projects/Project_TestThingsHere"]
+	path = Projects/TestThingsHere
+	url = https://github.com/xavierxeon-music/Project_TestThingsHere.git
+[submodule "Projects/Project_BeatMaster"]
+	path = Projects/BeatMaster
+	url = https://github.com/xavierxeon-music/Project_BeatMaster.git
+[submodule "Projects/Project_CvSwitchCalibration"]
+	path = Projects/CvSwitchCalibration
+	url = https://github.com/xavierxeon-music/Project_CvSwitchCalibration.git
+[submodule "Projects/Project_MidiAccesories"]
+	path = Projects/MidiAccesories
+	url = https://github.com/xavierxeon-music/Project_MidiAccesories.git
+[submodule "Projects/Project_Rel8"]
+	path = Projects/Rel8
+	url = https://github.com/xavierxeon-music/Project_Rel8.git
+[submodule "Projects/Project_WaveBlender"]
+	path = Projects/WaveBlender
+	url = https://github.com/xavierxeon-music/Project_WaveBlender.git
+[submodule "Projects/Project_TimeLord"]
+	path = Projects/TimeLord
+	url = https://github.com/xavierxeon-music/Project_TimeLord.git

@@ -1,0 +1,36 @@
+# Library Locations
+LIBDAISY_DIR ?= $(BASE_DIR)/libDaisy
+
+C_INCLUDES += \
+	-I$(BASE_DIR)/PatchDevice \
+	-I$(BASE_DIR)/PatchDevice/Include \
+	-I$(BASE_DIR)/Common/MusicTools \
+	-I$(BASE_DIR)/Common/MusicTools/Include \
+	-I$(BASE_DIR)/Common/Remember
+
+# Sources
+CPP_SOURCES += \
+	$(BASE_DIR)/PatchDevice/AbstractPage.cpp \
+	$(BASE_DIR)/PatchDevice/AbstractPageBase.cpp \
+	$(BASE_DIR)/PatchDevice/AbstractPageManager.cpp \
+	$(BASE_DIR)/PatchDevice/AbstractPageOverlay.cpp \
+	$(BASE_DIR)/PatchDevice/AbstractPatch.cpp \
+ 	$(BASE_DIR)/PatchDevice/AbstractSettings.cpp  \
+	$(BASE_DIR)/PatchDevice/Timer.cpp \
+	$(BASE_DIR)/Common/MusicTools/AbstractEffect.cpp \
+	$(BASE_DIR)/Common/MusicTools/AbstractOscilator.cpp \
+	$(BASE_DIR)/Common/MusicTools/Maths.cpp \
+	$(BASE_DIR)/Common/MusicTools/Note.cpp  \
+	$(BASE_DIR)/Common/Remember/RememberRoot.cpp  
+
+ifeq ($(USE_BASE_SD_STORAGE),1)
+USE_FATFS = 1
+CPP_SOURCES += \
+ 	$(BASE_DIR)/Daisy/SDCard.cpp 
+endif	
+
+OPT ?= -Os # prefer small code
+
+# Core location, and generic Makefile.
+SYSTEM_FILES_DIR = $(LIBDAISY_DIR)/core
+include $(SYSTEM_FILES_DIR)/Makefile # MUST BE LAST

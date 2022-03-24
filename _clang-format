@@ -1,0 +1,171 @@
+---
+Language:        Cpp
+
+AccessModifierOffset: -3
+AlignAfterOpenBracket: Align
+AlignConsecutiveMacros: false
+AlignConsecutiveAssignments: false
+AlignConsecutiveBitFields: false
+AlignConsecutiveDeclarations: false
+AlignEscapedNewlines: Right
+AlignOperands:   Align
+AlignTrailingComments: true
+AllowAllArgumentsOnNextLine: true
+AllowAllConstructorInitializersOnNextLine: true
+AllowAllParametersOfDeclarationOnNextLine: true
+AllowShortEnumsOnASingleLine: true
+AllowShortBlocksOnASingleLine: Never
+AllowShortCaseLabelsOnASingleLine: false
+AllowShortFunctionsOnASingleLine: Inline
+AllowShortLambdasOnASingleLine: Inline
+AllowShortIfStatementsOnASingleLine: Never
+AllowShortLoopsOnASingleLine: false
+AlwaysBreakAfterDefinitionReturnType: None
+AlwaysBreakAfterReturnType: None
+AlwaysBreakBeforeMultilineStrings: false
+AlwaysBreakTemplateDeclarations: MultiLine
+BinPackArguments: true
+BinPackParameters: true
+BraceWrapping:
+  AfterCaseLabel:  true
+  AfterClass:      true
+  AfterControlStatement: true
+  AfterEnum:       true
+  AfterFunction:   true
+  AfterNamespace:  true
+  AfterObjCDeclaration: true
+  AfterStruct:     true
+  AfterUnion:      true
+  AfterExternBlock: true
+  BeforeCatch:     true
+  BeforeElse:      true
+  BeforeLambdaBody: true
+  BeforeWhile:     true
+  IndentBraces:    false
+  SplitEmptyFunction: true
+  SplitEmptyRecord: true
+  SplitEmptyNamespace: true
+BreakAfterJavaFieldAnnotations: false
+BreakBeforeBinaryOperators: None
+BreakBeforeBraces: Custom
+BreakBeforeInheritanceComma: false
+BreakInheritanceList: BeforeColon
+BreakBeforeTernaryOperators: true
+BreakConstructorInitializersBeforeComma: true
+BreakConstructorInitializers: BeforeColon
+BreakAfterJavaFieldAnnotations: false
+BreakStringLiterals: true
+ColumnLimit:     0
+CommentPragmas:  '^ IWYU pragma:'
+CompactNamespaces: false
+ConstructorInitializerAllOnOneLineOrOnePerLine: false
+ConstructorInitializerIndentWidth: 3
+ContinuationIndentWidth: 3
+Cpp11BracedListStyle: true
+DeriveLineEnding: true
+DerivePointerAlignment: false
+DisableFormat:   false
+ExperimentalAutoDetectBinPacking: false
+FixNamespaceComments: true
+ForEachMacros:
+  - forever # avoids { wrapped to next line
+  - foreach
+  - Q_FOREACH
+  - BOOST_FOREACH
+IncludeBlocks:   Preserve
+IncludeCategories:
+  - Regex:           '^<Q.*'
+    Priority:        200
+IncludeIsMainRegex: '(Test)?$'
+IncludeIsMainSourceRegex: ''
+IndentCaseLabels: true
+IndentCaseBlocks: false
+IndentGotoLabels: true
+IndentPPDirectives: None
+IndentExternBlock: AfterExternBlock
+IndentWidth:     3
+IndentWrappedFunctionNames: false
+InsertTrailingCommas: None
+JavaScriptQuotes: Leave
+JavaScriptWrapImports: true
+KeepEmptyLinesAtTheStartOfBlocks: false
+#LambdaBodyIndentation: OuterScope
+
+# Do not add QT_BEGIN_NAMESPACE/QT_END_NAMESPACE as this will indent lines in between.
+MacroBlockBegin: ""
+MacroBlockEnd:   ""
+MaxEmptyLinesToKeep: 1
+NamespaceIndentation: All
+ObjCBinPackProtocolList: Auto
+ObjCBlockIndentWidth: 2
+ObjCBreakBeforeNestedBlockParam: true
+ObjCSpaceAfterProperty: false
+ObjCSpaceBeforeProtocolList: true
+PenaltyBreakAssignment: 2
+PenaltyBreakBeforeFirstCallParameter: 19
+PenaltyBreakComment: 300
+PenaltyBreakFirstLessLess: 120
+PenaltyBreakString: 1000
+PenaltyBreakTemplateDeclaration: 100000
+PenaltyExcessCharacter: 100000
+PenaltyReturnTypeOnItsOwnLine: 60
+PointerAlignment: Left
+#ReferenceAlignment: Left
+ReflowComments:  false
+SortIncludes:    true
+SortUsingDeclarations: true
+SpaceAfterCStyleCast: false
+SpaceAfterLogicalNot: false
+SpaceAfterTemplateKeyword: true
+SpaceBeforeAssignmentOperators: true
+SpaceBeforeCpp11BracedList: false
+SpaceBeforeCtorInitializerColon: true
+SpaceBeforeInheritanceColon: true
+SpaceBeforeParens: ControlStatements
+SpaceBeforeRangeBasedForLoopColon: true
+SpaceInEmptyBlock: false
+SpaceInEmptyParentheses: false
+SpacesBeforeTrailingComments: 1
+SpacesInAngles:  false
+SpacesInConditionalStatement: false
+SpacesInContainerLiterals: true
+SpacesInCStyleCastParentheses: false
+SpacesInParentheses: false
+SpacesInSquareBrackets: false
+SpaceBeforeSquareBrackets: false
+Standard:        Latest
+StatementMacros:
+  - Q_UNUSED
+  - QT_REQUIRE_VERSION
+TabWidth:        3
+UseCRLF:         false
+UseTab:          Never
+WhitespaceSensitiveMacros:
+ - VSD_PROPERTY_VAL
+ - VSD_PROPERTY_TEMPLATE_DATA_VAL_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_GET_DATA_VAL_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_GET_VAL_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_SET_VAL_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_NULL_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_GET_META_PROPERTY
+ - VSD_PROPERTY_TEMPLATE_GET_DECL_VAL_INT
+ - VSD_PROPERTY_TEMPLATE_SET_DECL_VAL_INT
+ - VSD_PROPERTY_REF
+ - VSD_PROPERTY_TEMPLATE_REF_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_DATA_REF_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_GET_DATA_REF_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_GET_REF_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_SET_REF_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_NULL_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_GET_META_PROPERTY
+ - VSD_PROPERTY_TEMPLATE_GET_DECL_REF_INT
+ - VSD_PROPERTY_TEMPLATE_SET_DECL_REF_INT
+ - VSD_PROPERTY_REFLIST
+ - VSD_PROPERTY_TEMPLATE_DATA_REF_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_GET_DATA_REF_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_GET_REF_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_SET_REF_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_NULL_INTERNAL
+ - VSD_PROPERTY_TEMPLATE_GET_META_PROPERTY
+ - VSD_PROPERTY_TEMPLATE_GET_DECL_REF_INT
+ - VSD_PROPERTY_TEMPLATE_SET_DECL_REF_INT

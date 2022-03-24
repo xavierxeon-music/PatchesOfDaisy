@@ -1,0 +1,12 @@
+<RCC>
+    <qresource prefix="/">
+        <file>Imposter.svg</file>
+        <file>Log.svg</file>
+        <file>Pause.svg</file>
+        <file>Play.svg</file>
+        <file>Reset.svg</file>
+        <file>Script.svg</file>
+        <file>Select.svg</file>
+        <file>Step.svg</file>
+    </qresource>
+</RCC>
