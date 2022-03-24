@@ -2,9 +2,9 @@
 #define AudioDeviceDriverH
 
 #include <functional>
-#include <portaudio.h>
 
 #include "Private/AudioDeviceCommon.h"
+#include "portaudio/install/include/portaudio.h"
 
 namespace AudioDevice
 {

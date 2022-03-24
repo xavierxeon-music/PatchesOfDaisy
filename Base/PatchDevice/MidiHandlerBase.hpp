@@ -71,12 +71,12 @@ void Midi::Handler::Base::sendNoteOff(const Channel& channel, const Note& note)
    sendBuffer(buffer);
 }
 
-void Midi::Handler::Base::sendControllerChange(const Channel& channel, const ControllerMessage& message, const uint8_t& value)
+void Midi::Handler::Base::sendControllerChange(const Channel& channel, const ControllerMessage& cotrollerMessage, const uint8_t& value)
 {
    Bytes buffer;
 
    buffer << (Event::ControlChange | channel);
-   buffer << message;
+   buffer << cotrollerMessage;
    buffer << value;
 
    sendBuffer(buffer);

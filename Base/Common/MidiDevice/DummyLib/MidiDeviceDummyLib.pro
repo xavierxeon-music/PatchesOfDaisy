@@ -7,6 +7,7 @@ PRECOMPILED_HEADER += $$PWD/../../Global.h
 
 include(../MidiDevice.pri)
 include(../../MusicTools/MusicTools.pri)
+include(../../Remember/Remember.pri)
 
 macx:QMAKE_APPLE_DEVICE_ARCHS = $$QMAKE_HOST.arch
 

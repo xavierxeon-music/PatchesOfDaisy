@@ -2,7 +2,6 @@ INCLUDEPATH += $$PWD
 
 unix {
     system($$PWD/portaudio/build.sh) # will exit if already built
-    INCLUDEPATH += $$PWD/portaudio/install/include
     LIBS += -L$$PWD/portaudio/install/lib -lportaudio
 }
 

@@ -14,7 +14,6 @@ using MidiEvent = Imposter::MidiEvent;
 #include <Midi/MidiCommon.h>
 #include <Music/Note.h>
 #include <MusicTools.h>
-#include <Remember.h>
 
 namespace Midi
 {
@@ -35,7 +34,7 @@ namespace Midi
 
          inline void sendNoteOn(const Channel& channel, const Note& note, const Velocity& velocity);
          inline void sendNoteOff(const Channel& channel, const Note& note);
-         inline void sendControllerChange(const Channel& channel, const ControllerMessage& message, const uint8_t& value);
+         inline void sendControllerChange(const Channel& channel, const ControllerMessage& cotrollerMessage, const uint8_t& value);
          virtual void sendBuffer(const Bytes& buffer) = 0;
 
          template <typename ClassType>
