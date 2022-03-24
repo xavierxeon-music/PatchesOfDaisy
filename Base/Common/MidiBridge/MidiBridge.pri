@@ -11,13 +11,13 @@ win32{
    LIBS += Winmm.lib
 }
 
-INCLUDEPATH=$$PWD
+INCLUDEPATH += $$PWD/Include
 
 HEADERS += \
-   $$PWD/MidiDevice.h \
-   $$PWD/MidiDevice.hpp \
+   $$PWD/Include/MidiBridge.h \
+   $$PWD/Include/MidiBridge.hpp \
    $$PWD/RtMidi4/RtMidi4.h
 
 SOURCES += \
-   $$PWD/MidiDevice.cpp \
+   $$PWD/MidiBridge.cpp \
    $$PWD/RtMidi4/RtMidi4.cpp

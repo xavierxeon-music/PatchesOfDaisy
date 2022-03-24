@@ -1,7 +1,7 @@
 #ifndef AudioDeviceBuffersH
 #define AudioDeviceBuffersH
 
-#include "../AudioDeviceDriver.h"
+#include "../Include/AudioDeviceDriver.h"
 
 struct BufferCommon
 {

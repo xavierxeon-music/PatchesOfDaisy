@@ -10,7 +10,7 @@ SOURCES += \
    $$PWD/FileStorage.cpp \
    $$PWD/SettingsUI.cpp
 
-CONFIG(midi):include($$PWD/MidiDevice/MidiDevice.pri)
+CONFIG(midi):include($$PWD/MidiBridge/MidiBridge.pri)
 CONFIG(audio):include($$PWD/AudioDevice/AudioDevice.pri)
 
 INCLUDEPATH += $$PWD

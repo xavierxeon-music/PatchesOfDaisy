@@ -1,4 +1,4 @@
-#include "MidiDevice.h"
+#include "Include/MidiBridge.h"
 
 #include <QThread>
 
@@ -7,7 +7,7 @@
 
 static const std::string targetPortName = "Daisy Seed Built In";
 
-MidiDevice::MidiDevice(Remember::Root* root, const Midi::Channel& receiveChannel)
+MidiBridge::MidiBridge(Remember::Root* root, const Midi::Channel& receiveChannel)
    : root(root)
    , receiveChannel(receiveChannel)
    , output()
@@ -19,7 +19,7 @@ MidiDevice::MidiDevice(Remember::Root* root, const Midi::Channel& receiveChannel
 {
 }
 
-MidiDevice::~MidiDevice()
+MidiBridge::~MidiBridge()
 {
    if (output.isPortOpen())
    {
@@ -33,13 +33,13 @@ MidiDevice::~MidiDevice()
    }
 }
 
-void MidiDevice::initMidi(bool verbose)
+void MidiBridge::initMidi(bool verbose)
 {
    openOutput(verbose);
    openInput(verbose);
 }
 
-void MidiDevice::sendNoteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity)
+void MidiBridge::sendNoteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity)
 {
    Bytes message;
 
@@ -50,7 +50,7 @@ void MidiDevice::sendNoteOn(const Midi::Channel& channel, const Note& note, cons
    output.sendMessage(&message);
 }
 
-void MidiDevice::sendNoteOff(const Midi::Channel& channel, const Note& note)
+void MidiBridge::sendNoteOff(const Midi::Channel& channel, const Note& note)
 {
    Bytes message;
 
@@ -61,7 +61,7 @@ void MidiDevice::sendNoteOff(const Midi::Channel& channel, const Note& note)
    output.sendMessage(&message);
 }
 
-void MidiDevice::sendControllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& cotrollerMessage, const uint8_t& value)
+void MidiBridge::sendControllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& cotrollerMessage, const uint8_t& value)
 {
    Bytes message;
 
@@ -72,7 +72,7 @@ void MidiDevice::sendControllerChange(const Midi::Channel& channel, const Midi::
    output.sendMessage(&message);
 }
 
-void MidiDevice::requestLoadFromDaisy()
+void MidiBridge::requestLoadFromDaisy()
 {
    Bytes message;
    message << (Midi::Event::ControlChange | 0); // control change @ channel 1
@@ -82,7 +82,7 @@ void MidiDevice::requestLoadFromDaisy()
    output.sendMessage(&message);
 }
 
-void MidiDevice::saveToDaisy()
+void MidiBridge::saveToDaisy()
 {
    if (!root)
       return;
@@ -107,7 +107,7 @@ void MidiDevice::saveToDaisy()
    output.sendMessage(&message);
 }
 
-void MidiDevice::openOutput(bool verbose)
+void MidiBridge::openOutput(bool verbose)
 {
    if (output.isPortOpen())
       return;
@@ -132,13 +132,13 @@ void MidiDevice::openOutput(bool verbose)
    if (255 != portNumber)
    {
       output.openPort(portNumber);
-      output.setErrorCallback(&MidiDevice::midiError, this);
+      output.setErrorCallback(&MidiBridge::midiError, this);
 
       qDebug() << "opend midi output port" << portNumber;
    }
 }
 
-void MidiDevice::openInput(bool verbose)
+void MidiBridge::openInput(bool verbose)
 {
    if (input.isPortOpen())
       return;
@@ -163,15 +163,15 @@ void MidiDevice::openInput(bool verbose)
    {
       input.openPort(portNumber);
 
-      input.setErrorCallback(&MidiDevice::midiError, nullptr);
-      input.setCallback(&MidiDevice::midiReceive, this);
+      input.setErrorCallback(&MidiBridge::midiError, nullptr);
+      input.setCallback(&MidiBridge::midiReceive, this);
       input.ignoreTypes(false, false, false); // do not ignore anything
 
       qDebug() << "opend midi input port" << portNumber;
    }
 }
 
-void MidiDevice::dataFromDaisy(const Bytes& message)
+void MidiBridge::dataFromDaisy(const Bytes& message)
 {
    static Bytes buffer;
 
@@ -227,7 +227,7 @@ void MidiDevice::dataFromDaisy(const Bytes& message)
    }
 }
 
-void MidiDevice::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
+void MidiBridge::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
 {
    if (nullptr != userData) // output
       qDebug() << "output" << type << QString::fromStdString(errorText);
@@ -235,14 +235,14 @@ void MidiDevice::midiError(RtMidiError::Type type, const std::string& errorText,
       qDebug() << "input" << type << QString::fromStdString(errorText);
 }
 
-void MidiDevice::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
+void MidiBridge::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
 {
    Q_UNUSED(timeStamp)
 
    if (!message || !userData)
       return;
 
-   MidiDevice* me = reinterpret_cast<MidiDevice*>(userData);
+   MidiBridge* me = reinterpret_cast<MidiBridge*>(userData);
    if (!me)
       return;
 

@@ -3,8 +3,8 @@
 
 #include <functional>
 
-#include "Private/AudioDeviceCommon.h"
-#include "portaudio/install/include/portaudio.h"
+#include "../Private/AudioDeviceCommon.h"
+#include "../portaudio/install/include/portaudio.h"
 
 namespace AudioDevice
 {
@@ -53,6 +53,6 @@ namespace AudioDevice
    };
 } // namespace AudioDevice
 
-#include "Private/AudioDeviceDriver.hpp"
+#include "../Private/AudioDeviceDriver.hpp"
 
 #endif // AudioDeviceDriverH

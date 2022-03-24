@@ -1,11 +1,11 @@
-TARGET = MidiDeviceDummyLib
+TARGET = MidiBridgeDummyLib
 TEMPLATE = lib
 
 # pre compiled headers
 CONFIG += precompile_header
 PRECOMPILED_HEADER += $$PWD/../../Global.h
 
-include(../MidiDevice.pri)
+include(../MidiBridge.pri)
 include(../../MusicTools/MusicTools.pri)
 include(../../Remember/Remember.pri)
 

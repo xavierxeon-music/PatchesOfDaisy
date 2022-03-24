@@ -1,5 +1,5 @@
-#ifndef MidiDeviceH
-#define MidiDeviceH
+#ifndef MidiBridgeH
+#define MidiBridgeH
 
 #include <functional>
 
@@ -8,9 +8,10 @@
 #include <MusicTools.h>
 #include <Remember.h>
 
-#include "RtMidi4/RtMidi4.h"
+#include "../RtMidi4/RtMidi4.h"
 
-class MidiDevice
+// midi connection to a dasiy seed via usb
+class MidiBridge
 {
 public:
    using NoteOnFunction = std::function<void(const Note&, const Midi::Velocity&)>;
@@ -19,8 +20,8 @@ public:
    using LoadFromDaisyFunction = std::function<void()>;
 
 public:
-   MidiDevice(Remember::Root* root = nullptr, const Midi::Channel& receiveChannel = 0);
-   ~MidiDevice();
+   MidiBridge(Remember::Root* root = nullptr, const Midi::Channel& receiveChannel = 0);
+   ~MidiBridge();
 
 public:
    void initMidi(bool verbose = false);
@@ -64,8 +65,8 @@ private:
    LoadFromDaisyFunction loadFromDaisyFunction;
 };
 
-#ifndef MidiDeviceHPP
-#include "MidiDevice.hpp"
-#endif // NOT MidiDeviceHPP
+#ifndef MidiBridgeHPP
+#include "MidiBridge.hpp"
+#endif // NOT MidiBridgeHPP
 
-#endif // NOT MidiDeviceH
+#endif // NOT MidiBridgeH

@@ -1,7 +1,7 @@
 #ifndef AudioDeviceInputRawH
 #define AudioDeviceInputRawH
 
-#include "Private/AudioDeviceCommon.h"
+#include "../Private/AudioDeviceCommon.h"
 
 namespace AudioDevice
 {
