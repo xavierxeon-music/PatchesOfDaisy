@@ -10,7 +10,7 @@ HEADERS += \
 SOURCES += \
    $$PWD/SettingsUI.cpp
 
-CONFIG(midi):include($$PWD/RtMidi4/RtMidi4.pri)
+CONFIG(midi):include($$PWD/MidiDevice/MidiDevice.pri)
 CONFIG(audio):include($$PWD/AudioDevice/AudioDevice.pri)
 
 
