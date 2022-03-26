@@ -134,7 +134,11 @@ void MidiBridge::openOutput(bool verbose)
       output.openPort(portNumber);
       output.setErrorCallback(&MidiBridge::midiError, this);
 
-      qDebug() << "opend midi output port" << portNumber;
+      qInfo() << "opened midi output port" << portNumber;
+   }
+   else
+   {
+      qWarning() << "unable to open midi output";
    }
 }
 
@@ -167,7 +171,11 @@ void MidiBridge::openInput(bool verbose)
       input.setCallback(&MidiBridge::midiReceive, this);
       input.ignoreTypes(false, false, false); // do not ignore anything
 
-      qDebug() << "opend midi input port" << portNumber;
+      qInfo() << "opened midi input port" << portNumber;
+   }
+   else
+   {
+      qWarning() << "unable to open midi input";
    }
 }
 

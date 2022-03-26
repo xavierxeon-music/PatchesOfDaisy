@@ -8,21 +8,40 @@
 
 namespace AudioDevice
 {
-   // NO INPUT ON MAC OS? -> start IDE / debugger via terminal (and make sure secure settings allow microphone access for terminal)
-
-   class Driver
+   namespace Common // some common values
    {
+      static constexpr float SampleRateDefault = 0.0;
+      static constexpr float SampleRateCD = 44100.0;
+      static constexpr float SampleRateNormal = 48000.0;
+      static constexpr float SampleRateHigh = 96000.0;
+
+      static const QString DeviceES8 = "ES-8";
+   }; // namespace Common
+
+   // A DC coupled sound interface
+   class Driver
+   {      
    public:
       using AudioLoopFunction = std::function<void(const float& audioCallackRate)>;
       using InputFunction = std::function<void(const InputBuffer& inputBuffer)>;
       using OutputFunction = std::function<void(OutputBuffer& inputBuffer)>;
 
+      struct DeviceInfo
+      {
+         QString name;
+         bool cdSampleRate;
+         bool normalSampleRate;
+         bool highSampleRate;
+
+         using List = QList<DeviceInfo>;
+      };
+
    public:
-      Driver(const QString& deviceName);
+      Driver(const QString& deviceName, float sampleRate = Common::SampleRateDefault, Frame framesPerBuffer = 0);
       virtual ~Driver();
 
    public:
-      static QStringList listDevices();
+      static DeviceInfo::List listDevices();
       float getSampleRate() const;
 
       void registerInputFunction(InputFunction inputFunction, const Channel& channel);
@@ -40,7 +59,7 @@ namespace AudioDevice
 
    private:
       static int portAudioCallback(const void* inputBuffer, void* outputBuffer, Frame framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData);
-      void startStream(const PaDeviceIndex& deviceId);
+      void startStream(const PaDeviceIndex& deviceId, const float& sampleRate, const Frame& framesPerBuffer);
 
    private:
       static uint useCount;

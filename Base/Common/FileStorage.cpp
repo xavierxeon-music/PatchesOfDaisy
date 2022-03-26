@@ -40,4 +40,6 @@ void FileStorage::saveToFile(const QString& fileName)
       file.write((const char*)(&data[0]), dataSize);
       file.close();
    }
+
+   root->setSynced();
 }

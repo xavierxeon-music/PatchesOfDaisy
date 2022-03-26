@@ -3,15 +3,14 @@
 #include "Private/AudioDeviceBuffers.h"
 
 uint AudioDevice::Driver::useCount = 0;
-static const unsigned long framesPerBuffer = 2;
 
-AudioDevice::Driver::Driver(const QString& deviceName)
+AudioDevice::Driver::Driver(const QString& deviceName, float sampleRate, Frame framesPerBuffer)
    : device(nullptr)
    , stream(nullptr)
    , inputFunctionMap()
    , audioLoopFunction(nullptr)
    , outputFunctionMap()
-{
+{   
    if (0 == useCount)
    {
       if (paNoError != Pa_Initialize())
@@ -32,6 +31,7 @@ AudioDevice::Driver::Driver(const QString& deviceName)
          continue;
 
       deviceId = index;
+      device = testInfo;
       break;
    }
 
@@ -39,14 +39,28 @@ AudioDevice::Driver::Driver(const QString& deviceName)
    {
       qWarning() << "unable to find device" << deviceName;
       qInfo() << "available devices are:";
-      for (const QString& name : listDevices())
-         qInfo() << " * " << name;
+      for (const DeviceInfo& info : listDevices())
+      {
+         auto stream = qInfo();
+         stream << " * " << qPrintable(info.name) << ", sample rates [";
+         if (info.cdSampleRate)
+            stream << " CD ";
+         if (info.normalSampleRate)
+            stream << " Normal ";
+         if (info.highSampleRate)
+            stream << " High ";
+         stream << "]";
+      }
 
       return;
    }
 
-   device = Pa_GetDeviceInfo(deviceId);
-   startStream(deviceId);
+   if (Common::SampleRateDefault == sampleRate)
+      sampleRate = device->defaultSampleRate;
+   if (0 == framesPerBuffer)
+      framesPerBuffer = static_cast<Frame>(sampleRate / 1000.0);
+
+   startStream(deviceId, sampleRate, framesPerBuffer);
 }
 
 AudioDevice::Driver::~Driver()
@@ -55,6 +69,8 @@ AudioDevice::Driver::~Driver()
    {
       Pa_StopStream(stream);
       Pa_CloseStream(stream);
+
+      qInfo() << "closed audio device" << device->name;
    }
 
    useCount--;
@@ -62,9 +78,9 @@ AudioDevice::Driver::~Driver()
       Pa_Terminate();
 }
 
-QStringList AudioDevice::Driver::listDevices()
+AudioDevice::Driver::DeviceInfo::List AudioDevice::Driver::listDevices()
 {
-   QStringList devices;
+   DeviceInfo::List devices;
    if (0 == useCount) // local init
    {
       if (paNoError != Pa_Initialize())
@@ -74,8 +90,37 @@ QStringList AudioDevice::Driver::listDevices()
    const PaDeviceIndex counter = Pa_GetDeviceCount();
    for (PaDeviceIndex index = 0; index < counter; index++)
    {
-      const PaDeviceInfo* info = Pa_GetDeviceInfo(index);
-      devices.append(info->name);
+      const PaDeviceInfo* paInfo = Pa_GetDeviceInfo(index);
+      DeviceInfo info = {paInfo->name, false, false, false};
+
+      PaStreamParameters inputParameters;
+      inputParameters.device = index;
+      inputParameters.channelCount = paInfo->maxInputChannels;
+      inputParameters.sampleFormat = paFloat32;
+      inputParameters.suggestedLatency = paInfo->defaultLowInputLatency;
+      inputParameters.hostApiSpecificStreamInfo = nullptr;
+
+      PaStreamParameters outputParameters;
+      outputParameters.device = index;
+      outputParameters.channelCount = paInfo->maxOutputChannels;
+      outputParameters.sampleFormat = paFloat32;
+      outputParameters.suggestedLatency = paInfo->defaultLowOutputLatency;
+      outputParameters.hostApiSpecificStreamInfo = nullptr;
+
+      PaStreamParameters* inputParameterPointer = (0 == paInfo->maxInputChannels) ? nullptr : &inputParameters;
+      PaStreamParameters* outputParameterPointer = (0 == paInfo->maxOutputChannels) ? nullptr : &outputParameters;
+
+      auto testSampleRate = [&](float sampleRate, bool& marker)
+      {
+         PaError result = Pa_IsFormatSupported(inputParameterPointer, outputParameterPointer, sampleRate);
+         marker = (paFormatIsSupported == result);
+      };
+
+      testSampleRate(Common::SampleRateCD, info.cdSampleRate);
+      testSampleRate(Common::SampleRateNormal, info.normalSampleRate);
+      testSampleRate(Common::SampleRateHigh, info.highSampleRate);
+
+      devices.append(info);
    }
 
    if (0 == useCount) // local deinit
@@ -141,7 +186,7 @@ int AudioDevice::Driver::portAudioCallback(const void* inputBuffer, void* output
    return paContinue;
 }
 
-void AudioDevice::Driver::startStream(const PaDeviceIndex& deviceId)
+void AudioDevice::Driver::startStream(const PaDeviceIndex& deviceId, const float& sampleRate, const Frame& framesPerBuffer)
 {
    PaStreamParameters inputParameters;
    {
@@ -163,10 +208,10 @@ void AudioDevice::Driver::startStream(const PaDeviceIndex& deviceId)
       outputParameters.suggestedLatency = device->defaultLowOutputLatency;
    }
 
-   PaError result = Pa_OpenStream(&stream, &inputParameters, &outputParameters, device->defaultSampleRate, framesPerBuffer, paNoFlag, &Driver::portAudioCallback, this);
+   PaError result = Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer, paNoFlag, &Driver::portAudioCallback, this);
    if (paNoError != result)
    {
-      qWarning() << "unable to open stream";
+      qWarning() << "unable to open stream" << Pa_GetErrorText(result);
       return;
    }
 
@@ -175,7 +220,9 @@ void AudioDevice::Driver::startStream(const PaDeviceIndex& deviceId)
    {
       stream = nullptr;
 
-      qWarning() << "unable to start stream";
+      qWarning() << "unable to start stream" << Pa_GetErrorText(result);
       return;
    }
+
+   qInfo() << "opened audio device" << device->name;
 }
