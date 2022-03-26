@@ -2,10 +2,16 @@
 
 #include "AudioDeviceDriver.h"
 
-AudioDevice::OutputOscilator::OutputOscilator(Driver* driver, const Channel& channel, const Standard::Waveform::Shape& waveform)
-   : OutputRaw(driver, channel)
+AudioDevice::OutputOscilator::OutputOscilator()
+   : OutputRaw()
    , TableOscilator()
 {
+}
+
+AudioDevice::OutputOscilator::OutputOscilator(Driver* driver, const Channel& channel, const Standard::Waveform::Shape& waveform)
+   : OutputOscilator()
+{
+   activate(driver, channel);
    init(Standard::getTable(waveform), driver->getSampleRate());
 }
 

@@ -8,6 +8,7 @@ namespace AudioDevice
    class OutputCV : public OutputRaw
    {
    public:
+      OutputCV();
       OutputCV(Driver* driver, const Channel& channel);
 
    public:

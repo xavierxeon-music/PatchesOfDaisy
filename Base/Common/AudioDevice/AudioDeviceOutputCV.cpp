@@ -1,11 +1,16 @@
 #include "AudioDeviceOutputCV.h"
 
 #include <Tools/Range.h>
-
-AudioDevice::OutputCV::OutputCV(Driver* driver, const Channel& channel)
-   : OutputRaw(driver, channel)
+AudioDevice::OutputCV::OutputCV()
+   : OutputRaw()
    , value(0.0)
 {
+}
+
+AudioDevice::OutputCV::OutputCV(Driver* driver, const Channel& channel)
+   : OutputCV()
+{
+   activate(driver, channel);
 }
 
 void AudioDevice::OutputCV::setVoltage(const float& newVoltage)

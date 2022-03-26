@@ -11,6 +11,7 @@ namespace AudioDevice
    class OutputOscilator : public OutputRaw, public TableOscilator
    {
    public:
+      OutputOscilator();
       OutputOscilator(Driver* driver, const Channel& channel, const Standard::Waveform::Shape& waveform);
 
    private:

@@ -8,17 +8,18 @@ namespace AudioDevice
    class InputGate : public InputRaw
    {
    public:
+      InputGate();
       InputGate(Driver* driver, const Channel& channel);
 
    public:
-      bool isActive() const;
+      bool isOn() const;
       bool isTriggered() const;
 
    private:
       void process(const InputBuffer& inputBuffer) override;
 
    private:
-      bool active;
+      bool on;
       bool triggered;
    };
 } // namespace AudioDevice

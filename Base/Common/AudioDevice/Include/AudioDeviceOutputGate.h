@@ -8,19 +8,22 @@ namespace AudioDevice
    class OutputGate : public OutputRaw
    {
    public:
+      OutputGate();
       OutputGate(Driver* driver, const Channel& channel);
 
    public:
-      void setActive(bool high);
+      void setOn(bool high = true);
+      void setOff(bool low = true);
       void setTrigger();
+      void activate(Driver* driver, const Channel& channel) override;
 
    protected:
       void process(OutputBuffer& outputBuffer) override;
 
    private:
-      bool active;
+      bool on;
       Frame triggerFrame;
-      const Frame maxTriggerFrame;
+      Frame maxTriggerFrame;
    };
 } // namespace AudioDevice
 

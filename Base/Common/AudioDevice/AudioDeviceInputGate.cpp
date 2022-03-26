@@ -1,15 +1,21 @@
 #include "AudioDeviceInputGate.h"
 
-AudioDevice::InputGate::InputGate(Driver* driver, const Channel& channel)
-   : InputRaw(driver, channel)
-   , active(false)
+AudioDevice::InputGate::InputGate()
+   : InputRaw()
+   , on(false)
    , triggered(false)
 {
 }
 
-bool AudioDevice::InputGate::isActive() const
+AudioDevice::InputGate::InputGate(Driver* driver, const Channel& channel)
+   : InputGate()
 {
-   return active;
+   activate(driver, channel);
+}
+
+bool AudioDevice::InputGate::isOn() const
+{
+   return on;
 }
 
 bool AudioDevice::InputGate::isTriggered() const
@@ -29,10 +35,10 @@ void AudioDevice::InputGate::process(const InputBuffer& inputBuffer)
    triggered = false;
    if (2 * highCount >= inputBuffer.getNoOfFrames())
    {
-      if (!active)
+      if (!on)
          triggered = true;
-      active = true;
+      on = true;
    }
    else
-      active = false;
+      on = false;
 }

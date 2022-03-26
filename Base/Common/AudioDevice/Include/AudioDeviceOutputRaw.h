@@ -8,7 +8,11 @@ namespace AudioDevice
    class OutputRaw
    {
    public:
-      OutputRaw(Driver* driver, const Channel& channel);
+      OutputRaw();
+      OutputRaw(Driver* driver, const Channel& channel); // calls activate
+
+   public:
+      virtual void activate(Driver* driver, const Channel& channel);
 
    protected:
       virtual void process(OutputBuffer& outputBuffer);

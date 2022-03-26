@@ -4,9 +4,11 @@
 
 uint AudioDevice::Driver::useCount = 0;
 
-AudioDevice::Driver::Driver(const QString& deviceName, float sampleRate, Frame framesPerBuffer)
+AudioDevice::Driver::Driver(const QString& deviceName, const float& sampleRate, const Frame& framesPerBuffer)
    : device(nullptr)
    , stream(nullptr)
+   , sampleRate(sampleRate)
+   , framesPerBuffer(framesPerBuffer)
    , inputFunctionMap()
    , audioLoopFunction(nullptr)
    , outputFunctionMap()
@@ -56,11 +58,11 @@ AudioDevice::Driver::Driver(const QString& deviceName, float sampleRate, Frame f
    }
 
    if (Common::SampleRateDefault == sampleRate)
-      sampleRate = device->defaultSampleRate;
+      this->sampleRate = device->defaultSampleRate;
    if (0 == framesPerBuffer)
-      framesPerBuffer = static_cast<Frame>(sampleRate / 1000.0);
+      this->framesPerBuffer = static_cast<Frame>(sampleRate / 1000.0);
 
-   startStream(deviceId, sampleRate, framesPerBuffer);
+   startStream(deviceId);
 }
 
 AudioDevice::Driver::~Driver()
@@ -129,12 +131,9 @@ AudioDevice::Driver::DeviceInfo::List AudioDevice::Driver::listDevices()
    return devices;
 }
 
-float AudioDevice::Driver::getSampleRate() const
+const float& AudioDevice::Driver::getSampleRate() const
 {
-   if (!device)
-      return 0.0;
-
-   return device->defaultSampleRate;
+   return sampleRate;
 }
 
 void AudioDevice::Driver::registerInputFunction(InputFunction inputFunction, const Channel& channel)
@@ -160,7 +159,7 @@ void AudioDevice::Driver::internalCallback(const void* inputBuffer, void* output
 
    if (audioLoopFunction)
    {
-      const float audioCallackRate = device->defaultSampleRate / framesPerBuffer;
+      const float audioCallackRate = sampleRate / framesPerBuffer;
       audioLoopFunction(audioCallackRate);
    }
 
@@ -186,7 +185,7 @@ int AudioDevice::Driver::portAudioCallback(const void* inputBuffer, void* output
    return paContinue;
 }
 
-void AudioDevice::Driver::startStream(const PaDeviceIndex& deviceId, const float& sampleRate, const Frame& framesPerBuffer)
+void AudioDevice::Driver::startStream(const PaDeviceIndex& deviceId)
 {
    PaStreamParameters inputParameters;
    {

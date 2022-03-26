@@ -2,7 +2,17 @@
 
 #include "AudioDeviceDriver.h"
 
+AudioDevice::InputRaw::InputRaw()
+{
+}
+
 AudioDevice::InputRaw::InputRaw(Driver* driver, const Channel& channel)
+   : InputRaw()
+{
+   activate(driver, channel);
+}
+
+void AudioDevice::InputRaw::activate(Driver* driver, const Channel& channel)
 {
    if (!driver)
       return;

@@ -8,7 +8,11 @@ namespace AudioDevice
    class InputRaw
    {
    public:
-      InputRaw(Driver* driver, const Channel& channel);
+      InputRaw();
+      InputRaw(Driver* driver, const Channel& channel); // calls activate
+
+   public:
+      virtual void activate(Driver* driver, const Channel& channel);
 
    protected:
       virtual void process(const InputBuffer& inputBuffer);

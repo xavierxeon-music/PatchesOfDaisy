@@ -1,9 +1,15 @@
 #include "AudioDeviceInputCV.h"
 
-AudioDevice::InputCV::InputCV(Driver* driver, const Channel& channel)
-   : InputRaw(driver, channel)
+AudioDevice::InputCV::InputCV()
+   : InputRaw()
    , voltage(0.0)
 {
+}
+
+AudioDevice::InputCV::InputCV(Driver* driver, const Channel& channel)
+   : InputCV()
+{
+   activate(driver, channel);
 }
 
 const float& AudioDevice::InputCV::getVoltage() const
