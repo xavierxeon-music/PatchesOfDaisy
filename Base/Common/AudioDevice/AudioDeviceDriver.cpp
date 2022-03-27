@@ -2,6 +2,17 @@
 
 #include "Private/AudioDeviceBuffers.h"
 
+// device info
+
+AudioDevice::Driver::DeviceInfo::DeviceInfo(const QString& name, const float& defaultSampleRate)
+   : name(name)
+   , supportedSampleRates()
+   , defaultSampleRate(defaultSampleRate)
+{
+}
+
+// driver
+
 uint AudioDevice::Driver::useCount = 0;
 
 AudioDevice::Driver::Driver(const QString& deviceName, const float& sampleRate, const Frame& framesPerBuffer)
@@ -40,24 +51,32 @@ AudioDevice::Driver::Driver(const QString& deviceName, const float& sampleRate, 
    if (-1 == deviceId)
    {
       qWarning() << "unable to find device" << deviceName;
-      qInfo() << "available devices are:";
+      qInfo() << "available devices (with default rate in CAPITAL) are:";
       for (const DeviceInfo& info : listDevices())
       {
          auto stream = qInfo();
          stream << " * " << qPrintable(info.name) << ", sample rates [";
-         if (info.cdSampleRate)
-            stream << " CD ";
-         if (info.normalSampleRate)
-            stream << " Normal ";
-         if (info.highSampleRate)
-            stream << " High ";
+
+         for (Common::SampleRate::BoolMap::const_iterator it = info.supportedSampleRates.constBegin(); it != info.supportedSampleRates.constEnd(); it++)
+         {
+            const bool supported = it.value();
+            if (!supported)
+               continue;
+
+            const bool isDefault = (it.key() == info.defaultSampleRate);
+            const QString name = Common::SampleRate::nameMap[it.key()];
+            if (isDefault)
+               stream << qPrintable(name.toUpper());
+            else
+               stream << qPrintable(name.toLower());
+         }
          stream << "]";
       }
 
       return;
    }
 
-   if (Common::SampleRateDefault == sampleRate)
+   if (Common::SampleRate::Default == sampleRate)
       this->sampleRate = device->defaultSampleRate;
    if (0 == framesPerBuffer)
       this->framesPerBuffer = static_cast<Frame>(sampleRate / 1000.0);
@@ -93,7 +112,7 @@ AudioDevice::Driver::DeviceInfo::List AudioDevice::Driver::listDevices()
    for (PaDeviceIndex index = 0; index < counter; index++)
    {
       const PaDeviceInfo* paInfo = Pa_GetDeviceInfo(index);
-      DeviceInfo info = {paInfo->name, false, false, false};
+      DeviceInfo info(paInfo->name, paInfo->defaultSampleRate);
 
       PaStreamParameters inputParameters;
       inputParameters.device = index;
@@ -112,15 +131,17 @@ AudioDevice::Driver::DeviceInfo::List AudioDevice::Driver::listDevices()
       PaStreamParameters* inputParameterPointer = (0 == paInfo->maxInputChannels) ? nullptr : &inputParameters;
       PaStreamParameters* outputParameterPointer = (0 == paInfo->maxOutputChannels) ? nullptr : &outputParameters;
 
-      auto testSampleRate = [&](float sampleRate, bool& marker)
+      auto testSampleRate = [&](const Common::SampleRate::Value& testSampleRate)
       {
-         PaError result = Pa_IsFormatSupported(inputParameterPointer, outputParameterPointer, sampleRate);
-         marker = (paFormatIsSupported == result);
+         PaError result = Pa_IsFormatSupported(inputParameterPointer, outputParameterPointer, testSampleRate);
+         const bool supported = (paFormatIsSupported == result);
+
+         info.supportedSampleRates[testSampleRate] = supported;
       };
 
-      testSampleRate(Common::SampleRateCD, info.cdSampleRate);
-      testSampleRate(Common::SampleRateNormal, info.normalSampleRate);
-      testSampleRate(Common::SampleRateHigh, info.highSampleRate);
+      testSampleRate(Common::SampleRate::CompactDisk);
+      testSampleRate(Common::SampleRate::Normal);
+      testSampleRate(Common::SampleRate::High);
 
       devices.append(info);
    }

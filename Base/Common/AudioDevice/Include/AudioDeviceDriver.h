@@ -8,16 +8,6 @@
 
 namespace AudioDevice
 {
-   namespace Common // some common values
-   {
-      static constexpr float SampleRateDefault = 0.0;
-      static constexpr float SampleRateCD = 44100.0;
-      static constexpr float SampleRateNormal = 48000.0;
-      static constexpr float SampleRateHigh = 96000.0;
-
-      static const QString DeviceES8 = "ES-8";
-   }; // namespace Common
-
    // A sound interface
    // Both Gate and CV inputs, as well as outputs only work with a DC coupled interface!
    class Driver
@@ -30,15 +20,16 @@ namespace AudioDevice
       struct DeviceInfo
       {
          QString name;
-         bool cdSampleRate;
-         bool normalSampleRate;
-         bool highSampleRate;
+         Common::SampleRate::BoolMap supportedSampleRates;
+         float defaultSampleRate;
+
+         DeviceInfo(const QString& name, const float& defaultSampleRate);
 
          using List = QList<DeviceInfo>;
       };
 
    public:
-      Driver(const QString& deviceName, const float& sampleRate = Common::SampleRateDefault, const Frame& framesPerBuffer = 0);
+      Driver(const QString& deviceName, const float& sampleRate = Common::SampleRate::Default, const Frame& framesPerBuffer = 0);
       virtual ~Driver();
 
    public:

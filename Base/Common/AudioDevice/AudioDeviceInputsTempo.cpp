@@ -5,6 +5,8 @@ AudioDevice::InputsTempo::InputsTempo(Driver* driver, const Channel& channelCloc
    , clockInput(driver, channelClock)
    , resetInput(driver, channelReset)
    , tickActive(false)
+   , tickFunctionList()
+   , resetFunctionList()
 {
 }
 
@@ -13,12 +15,19 @@ void AudioDevice::InputsTempo::advance(const float audioCallackRate)
    if (resetInput.isOn())
    {
       clockReset();
+      for (ClockFunction& clockFunction : resetFunctionList)
+         clockFunction();
+
       tickActive = false;
    }
    else if (clockInput.isOn())
    {
       if (!tickActive)
+      {
          clockTick();
+         for (ClockFunction& clockFunction : tickFunctionList)
+            clockFunction();
+      }
       tickActive = true;
    }
    else

@@ -3,10 +3,34 @@
 
 namespace AudioDevice
 {
+   namespace Common // some common values
+   {
+      struct SampleRate
+      {
+         enum Value : uint32_t // do not use enum class to allow casting!
+         {
+            Default = 0,
+            CompactDisk = 44100,
+            Normal = 48000,
+            High = 96000,
+         };
+         using BoolMap = QMap<Value, bool>;
+         using StringMap = QMap<Value, QString>;
+
+         static const StringMap nameMap;
+      };
+
+      struct Device
+      {
+         static inline const QString ES8 = "ES-8";
+      };
+
+   }; // namespace Common
+
    using Frame = unsigned long;
    using Channel = int;
 
-   class Driver;
+   class Driver; // neede for input and output headers
 
    struct InputBuffer
    {
