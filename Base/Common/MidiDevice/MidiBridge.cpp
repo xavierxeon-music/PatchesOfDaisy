@@ -8,68 +8,12 @@
 static const std::string targetPortName = "Daisy Seed Built In";
 
 MidiBridge::MidiBridge(Remember::Root* root, const Midi::Channel& receiveChannel)
-   : root(root)
+   : MidiDevice(targetPortName)
+   , root(root)
    , receiveChannel(receiveChannel)
-   , output()
-   , input()
-   , receiveNoteOnFunction(nullptr)
-   , receiveNoteOffFunction(nullptr)
-   , receiveControllChangeFunction(nullptr)
-   , loadFromDaisyFunction(nullptr)
+   , loadedFromDaisyFunction(nullptr)
 {
-}
-
-MidiBridge::~MidiBridge()
-{
-   if (output.isPortOpen())
-   {
-      output.closePort();
-      qDebug() << "closed midi output port";
-   }
-   if (input.isPortOpen())
-   {
-      input.closePort();
-      qDebug() << "closed midi input port";
-   }
-}
-
-void MidiBridge::initMidi(bool verbose)
-{
-   openOutput(verbose);
-   openInput(verbose);
-}
-
-void MidiBridge::sendNoteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity)
-{
-   Bytes message;
-
-   message << (Midi::Event::NoteOn | channel);
-   message << note.midiValue;
-   message << velocity;
-
-   output.sendMessage(&message);
-}
-
-void MidiBridge::sendNoteOff(const Midi::Channel& channel, const Note& note)
-{
-   Bytes message;
-
-   message << (Midi::Event::NoteOff | channel);
-   message << note.midiValue;
-   message << 127;
-
-   output.sendMessage(&message);
-}
-
-void MidiBridge::sendControllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& cotrollerMessage, const uint8_t& value)
-{
-   Bytes message;
-
-   message << (Midi::Event::ControlChange | channel);
-   message << cotrollerMessage;
-   message << value;
-
-   output.sendMessage(&message);
+   onReceiveControllChange(this, &MidiBridge::checkLoadFromDaisy);
 }
 
 void MidiBridge::requestLoadFromDaisy()
@@ -107,171 +51,28 @@ void MidiBridge::saveToDaisy()
    output.sendMessage(&message);
 }
 
-void MidiBridge::openOutput(bool verbose)
-{
-   if (output.isPortOpen())
-      return;
-
-   if (verbose)
-      qDebug() << "available outputs:";
-
-   uint portNumber = 255;
-   for (uint index = 0; index < output.getPortCount(); index++)
-   {
-      const std::string portName = output.getPortName(index);
-      if (verbose)
-         qDebug() << index << QString::fromStdString(portName);
-
-      if (targetPortName != portName)
-         continue;
-
-      portNumber = index;
-      break;
-   }
-
-   if (255 != portNumber)
-   {
-      output.openPort(portNumber);
-      output.setErrorCallback(&MidiBridge::midiError, this);
-
-      qInfo() << "opened midi output port" << portNumber;
-   }
-   else
-   {
-      qWarning() << "unable to open midi output";
-   }
-}
-
-void MidiBridge::openInput(bool verbose)
-{
-   if (input.isPortOpen())
-      return;
-
-   if (verbose)
-      qDebug() << "available inputs:";
-
-   uint portNumber = 255;
-   for (uint index = 0; index < input.getPortCount(); index++)
-   {
-      const std::string portName = input.getPortName(index);
-      if (verbose)
-         qDebug() << index << QString::fromStdString(portName);
-
-      if (targetPortName != portName)
-         continue;
-
-      portNumber = index;
-      break;
-   }
-   if (255 != portNumber)
-   {
-      input.openPort(portNumber);
-
-      input.setErrorCallback(&MidiBridge::midiError, nullptr);
-      input.setCallback(&MidiBridge::midiReceive, this);
-      input.ignoreTypes(false, false, false); // do not ignore anything
-
-      qInfo() << "opened midi input port" << portNumber;
-   }
-   else
-   {
-      qWarning() << "unable to open midi input";
-   }
-}
-
-void MidiBridge::dataFromDaisy(const Bytes& message)
+void MidiBridge::checkLoadFromDaisy(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
 {
    static Bytes buffer;
 
-   if (message.size() != 3)
+   if (channel != receiveChannel)
       return;
 
-   static const uint8_t noteOnHeader = Midi::Event::NoteOn | receiveChannel;
-   static const uint8_t noteOffHeader = Midi::Event::NoteOff | receiveChannel;
-   static const uint8_t controlChangeHeader = Midi::Event::ControlChange | receiveChannel;
-
-   if (noteOnHeader == message[0])
+   if (Midi::ControllerMessage::RememberBlock == controllerMessage)
    {
-      if (receiveNoteOnFunction)
-      {
-         const Note note = Note::fromMidi(message[1]);
-         const Midi::Velocity velocity = message[2];
-         receiveNoteOnFunction(note, velocity);
-      }
+      buffer << value;
    }
-   else if (noteOffHeader == message[0])
+   else if (Midi::ControllerMessage::RememberApply == controllerMessage)
    {
-      if (receiveNoteOffFunction)
-      {
-         const Note note = Note::fromMidi(message[1]);
-         receiveNoteOffFunction(note);
-      }
-   }
-   else if (controlChangeHeader == message[0])
-   {
-      if (Midi::ControllerMessage::RememberBlock == message[1])
-      {
-         buffer << message[2];
-      }
-      else if (Midi::ControllerMessage::RememberApply == message[1])
-      {
-         Remember::DataVector data = SevenBit::decode(buffer);
-         buffer.clear();
-
-         if (root)
-         {
-            root->set(data);
-
-            if (loadFromDaisyFunction)
-               loadFromDaisyFunction();
-         }
-      }
-      else if (receiveControllChangeFunction)
-      {
-         const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(message[1]);
-         const uint8_t value = message[2];
-         receiveControllChangeFunction(controllerMessage, value);
-      }
-   }
-}
-
-void MidiBridge::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
-{
-   if (nullptr != userData) // output
-      qDebug() << "output" << type << QString::fromStdString(errorText);
-   else
-      qDebug() << "input" << type << QString::fromStdString(errorText);
-}
-
-void MidiBridge::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
-{
-   Q_UNUSED(timeStamp)
-
-   if (!message || !userData)
-      return;
-
-   MidiBridge* me = reinterpret_cast<MidiBridge*>(userData);
-   if (!me)
-      return;
-
-   static Bytes buffer;
-   auto maybeProcessBuffer = [&]()
-   {
-      if (0 == buffer.size())
-         return;
-
-      me->dataFromDaisy(buffer); // may cause threading issues, since callback is not in main thread
+      Remember::DataVector data = SevenBit::decode(buffer);
       buffer.clear();
-   };
 
-   static const uint8_t mask = 0x80;
-   for (const uint8_t byte : *message)
-   {
-      const uint8_t test = byte & mask;
-      if (test == mask) // new message start
-         maybeProcessBuffer();
+      if (root)
+      {
+         root->set(data);
 
-      buffer << byte;
+         if (loadedFromDaisyFunction)
+            loadedFromDaisyFunction();
+      }
    }
-   maybeProcessBuffer();
 }
