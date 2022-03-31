@@ -7,16 +7,16 @@
 
 static const std::string targetPortName = "Daisy Seed Built In";
 
-MidiBridge::MidiBridge(Remember::Root* root, const Midi::Channel& receiveChannel)
-   : MidiDevice(targetPortName)
+Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel)
+   : Device(targetPortName)
    , root(root)
    , receiveChannel(receiveChannel)
    , loadedFromDaisyFunction(nullptr)
 {
-   onReceiveControllChange(this, &MidiBridge::checkLoadFromDaisy);
+   onReceiveControllChange(this, &Midi::Bridge::checkLoadFromDaisy);
 }
 
-void MidiBridge::requestLoadFromDaisy()
+void Midi::Bridge::requestLoadFromDaisy()
 {
    Bytes message;
    message << (Midi::Event::ControlChange | 0); // control change @ channel 1
@@ -26,7 +26,7 @@ void MidiBridge::requestLoadFromDaisy()
    output.sendMessage(&message);
 }
 
-void MidiBridge::saveToDaisy()
+void Midi::Bridge::saveToDaisy()
 {
    if (!root)
       return;
@@ -51,7 +51,7 @@ void MidiBridge::saveToDaisy()
    output.sendMessage(&message);
 }
 
-void MidiBridge::checkLoadFromDaisy(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
+void Midi::Bridge::checkLoadFromDaisy(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
 {
    static Bytes buffer;
 

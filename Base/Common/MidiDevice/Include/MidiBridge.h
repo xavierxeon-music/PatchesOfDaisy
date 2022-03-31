@@ -5,32 +5,34 @@
 
 #include <Remember.h>
 
-// midi connection to a dasiy seed via usb
-class MidiBridge : public MidiDevice
+namespace Midi
 {
-public:
-   using LoadedFromDaisyFunction = std::function<void()>;
+   // midi connection to a dasiy seed via usb
+   class Bridge : public Device
+   {
+   public:
+      using LoadedFromDaisyFunction = std::function<void()>;
 
-public:
-   MidiBridge(Remember::Root* root = nullptr, const Midi::Channel& receiveChannel = 0);
+   public:
+      Bridge(Remember::Root* root = nullptr, const Midi::Channel& receiveChannel = 0);
 
-public:
+   public:
+      template <typename ClassType>
+      void onLoadedFromDaisy(ClassType* instance, void (ClassType::*functionPointer)());
 
-   template <typename ClassType>
-   void onLoadedFromDaisy(ClassType* instance, void (ClassType::*functionPointer)());
+      void requestLoadFromDaisy();
+      void saveToDaisy();
 
-   void requestLoadFromDaisy();
-   void saveToDaisy();
+   private:
+      void checkLoadFromDaisy(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value);
 
-private:
-   void checkLoadFromDaisy(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value);
+   private:
+      Remember::Root* root;
+      const Midi::Channel receiveChannel;
 
-private:
-   Remember::Root* root;
-   const Midi::Channel receiveChannel;
-
-   LoadedFromDaisyFunction loadedFromDaisyFunction;
-};
+      LoadedFromDaisyFunction loadedFromDaisyFunction;
+   };
+} // namespace Midi
 
 #ifndef MidiBridgeHPP
 #include "MidiBridge.hpp"

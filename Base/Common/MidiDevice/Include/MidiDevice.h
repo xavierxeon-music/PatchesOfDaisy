@@ -1,62 +1,39 @@
 #ifndef MidiDeviceH
 #define MidiDeviceH
 
-#include <functional>
-
-#include <Midi/MidiCommon.h>
-#include <Music/Note.h>
-#include <MusicTools.h>
+#include <Midi/MidiInterface.h>
 
 #include "../RtMidi4/RtMidi4.h"
 
-class MidiDevice
+namespace Midi
 {
-public:
-   using NoteOnFunction = std::function<void(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity)>;
-   using NoteOffFunction = std::function<void(const Midi::Channel& channel, const Note& note)>;
-   using ControllChangeFunction = std::function<void(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)>;
+   class Device : public Interface
+   {
 
-public:
-   MidiDevice(const std::string portName);
-   virtual ~MidiDevice();
+   public:
+      Device(const std::string portName);
+      virtual ~Device();
 
-public:
-   void initMidi(bool verbose = false);
+   public:
+      void initMidi(bool verbose = false) override;
 
-   void sendNoteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity);
-   void sendNoteOff(const Midi::Channel& channel, const Note& note);
-   void sendControllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value);
+   protected:
+      RtMidiOut output;
+      RtMidiIn input;
 
-   template <typename ClassType>
-   void onReceiveNoteOn(ClassType* instance, void (ClassType::*functionPointer)(const Midi::Channel&, const Note&, const Midi::Velocity&));
+   private:
+      void sendBuffer(const Bytes& buffer) override;
+      void dataFromInput(const Bytes& message);
+      void openOutput(bool verbose);
+      void openInput(bool verbose);
+      static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
+      static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
 
-   template <typename ClassType>
-   void onReceiveNoteOff(ClassType* instance, void (ClassType::*functionPointer)(const Midi::Channel&, const Note&));
+   private:
+      const std::string portName;
 
-   template <typename ClassType>
-   void onReceiveControllChange(ClassType* instance, void (ClassType::*functionPointer)(const Midi::Channel&, const Midi::ControllerMessage&, const uint8_t&));
+   };
+} // namespace Midi
 
-protected:
-   RtMidiOut output;
-   RtMidiIn input;
-
-private:
-   void dataFromInput(const Bytes& message);
-   void openOutput(bool verbose);
-   void openInput(bool verbose);
-   static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
-   static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
-
-private:
-   const std::string portName;
-
-   std::vector<NoteOnFunction> noteOnFunctionList;
-   std::vector<NoteOffFunction> noteOffFunctionList;
-   std::vector<ControllChangeFunction> controllChangeFunctionList;
-};
-
-#ifndef MidiDeviceHPP
-#include "MidiDevice.hpp"
-#endif // NOT MidiDeviceHPP
 
 #endif // NOT MidiDeviceH

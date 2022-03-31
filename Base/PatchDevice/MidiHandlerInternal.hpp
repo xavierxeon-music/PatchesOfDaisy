@@ -12,8 +12,9 @@ Midi::Handler::Internal::Internal(DaisyPatch* daisy, const Channel& receiveChann
    (void)daisy;
 }
 
-void Midi::Handler::Internal::initMidi()
+void Midi::Handler::Internal::initMidi(bool verbose)
 {
+   (void)verbose;
 #ifndef NON_DAISY_DEVICE
    // already configured
    midi1.StartReceive();

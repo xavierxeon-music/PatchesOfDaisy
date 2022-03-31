@@ -15,7 +15,7 @@ namespace Midi
          inline Internal(DaisyPatch* daisy, const Channel& receiveChannel, Base* passThroughHandler);
 
       public:
-         inline void initMidi() override;
+         inline void initMidi(bool verbose = false) override;
          inline void pollMidiReceive() override final;
 
       private:
@@ -29,6 +29,8 @@ namespace Midi
    } // namespace Handler
 } // namespace Midi
 
+#ifndef MidiHandlerInternalHPP
 #include "MidiHandlerInternal.hpp"
+#endif // NOT MidiHandlerInternalHPP
 
 #endif // MidiHandlerInternalH

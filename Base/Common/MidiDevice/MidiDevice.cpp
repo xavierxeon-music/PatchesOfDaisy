@@ -1,16 +1,14 @@
 #include "MidiDevice.h"
 
-MidiDevice::MidiDevice(const std::string portName)
-   : output()
+Midi::Device::Device(const std::string portName)
+   : Interface()
+   , output()
    , input()
    , portName(portName)
-   , noteOnFunctionList()
-   , noteOffFunctionList()
-   , controllChangeFunctionList()
 {
 }
 
-MidiDevice::~MidiDevice()
+Midi::Device::~Device()
 {
    if (output.isPortOpen())
    {
@@ -24,46 +22,18 @@ MidiDevice::~MidiDevice()
    }
 }
 
-void MidiDevice::initMidi(bool verbose)
+void Midi::Device::initMidi(bool verbose)
 {
    openOutput(verbose);
    openInput(verbose);
 }
 
-void MidiDevice::sendNoteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity)
+void Midi::Device::sendBuffer(const Bytes& buffer)
 {
-   Bytes message;
-
-   message << (Midi::Event::NoteOn | channel);
-   message << note.midiValue;
-   message << velocity;
-
-   output.sendMessage(&message);
+   output.sendMessage(&buffer);
 }
 
-void MidiDevice::sendNoteOff(const Midi::Channel& channel, const Note& note)
-{
-   Bytes message;
-
-   message << (Midi::Event::NoteOff | channel);
-   message << note.midiValue;
-   message << 127;
-
-   output.sendMessage(&message);
-}
-
-void MidiDevice::sendControllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
-{
-   Bytes message;
-
-   message << (Midi::Event::ControlChange | channel);
-   message << controllerMessage;
-   message << value;
-
-   output.sendMessage(&message);
-}
-
-void MidiDevice::dataFromInput(const Bytes& message)
+void Midi::Device::dataFromInput(const Bytes& message)
 {
    if (message.size() != 3)
       return;
@@ -94,7 +64,7 @@ void MidiDevice::dataFromInput(const Bytes& message)
    }
 }
 
-void MidiDevice::openOutput(bool verbose)
+void Midi::Device::openOutput(bool verbose)
 {
    if (output.isPortOpen())
       return;
@@ -119,7 +89,7 @@ void MidiDevice::openOutput(bool verbose)
    if (255 != portNumber)
    {
       output.openPort(portNumber);
-      output.setErrorCallback(&MidiDevice::midiError, this);
+      output.setErrorCallback(&Midi::Device::midiError, this);
 
       qInfo() << "opened midi output port" << portNumber;
    }
@@ -129,7 +99,7 @@ void MidiDevice::openOutput(bool verbose)
    }
 }
 
-void MidiDevice::openInput(bool verbose)
+void Midi::Device::openInput(bool verbose)
 {
    if (input.isPortOpen())
       return;
@@ -154,8 +124,8 @@ void MidiDevice::openInput(bool verbose)
    {
       input.openPort(portNumber);
 
-      input.setErrorCallback(&MidiDevice::midiError, nullptr);
-      input.setCallback(&MidiDevice::midiReceive, this);
+      input.setErrorCallback(&Midi::Device::midiError, nullptr);
+      input.setCallback(&Midi::Device::midiReceive, this);
       input.ignoreTypes(true, true, false); // ignore sysex and time
 
       qInfo() << "opened midi input port" << portNumber;
@@ -166,7 +136,7 @@ void MidiDevice::openInput(bool verbose)
    }
 }
 
-void MidiDevice::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
+void Midi::Device::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
 {
    if (nullptr != userData) // output
       qDebug() << "output" << type << QString::fromStdString(errorText);
@@ -174,14 +144,14 @@ void MidiDevice::midiError(RtMidiError::Type type, const std::string& errorText,
       qDebug() << "input" << type << QString::fromStdString(errorText);
 }
 
-void MidiDevice::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
+void Midi::Device::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
 {
    Q_UNUSED(timeStamp)
 
    if (!message || !userData)
       return;
 
-   MidiDevice* me = reinterpret_cast<MidiDevice*>(userData);
+   Device* me = reinterpret_cast<Device*>(userData);
    if (!me)
       return;
 

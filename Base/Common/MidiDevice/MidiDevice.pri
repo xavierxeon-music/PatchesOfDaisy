@@ -17,7 +17,6 @@ HEADERS += \
    $$PWD/Include/MidiBridge.h \
    $$PWD/Include/MidiBridge.hpp \
    $$PWD/Include/MidiDevice.h \
-   $$PWD/Include/MidiDevice.hpp \
    $$PWD/RtMidi4/RtMidi4.h
 
 SOURCES += \

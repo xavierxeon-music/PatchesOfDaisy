@@ -4,7 +4,7 @@
 #include "MidiBridge.h"
 
 template <typename ClassType>
-void MidiBridge::onLoadedFromDaisy(ClassType* instance, void (ClassType::*functionPointer)())
+void Midi::Bridge::onLoadedFromDaisy(ClassType* instance, void (ClassType::*functionPointer)())
 {
    loadedFromDaisyFunction = std::bind(functionPointer, instance);
 }

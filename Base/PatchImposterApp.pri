@@ -23,7 +23,7 @@ win32{
    LIBS += Winmm.lib
 }
 
-RT_MIDI_PATH=$$PWD/Common/MidiBridge/RtMidi4
+RT_MIDI_PATH=$$PWD/Common/MidiDevice/RtMidi4
 INCLUDEPATH += $$RT_MIDI_PATH
 
 HEADERS += \

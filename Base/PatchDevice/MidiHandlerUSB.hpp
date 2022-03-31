@@ -14,8 +14,9 @@ Midi::Handler::USB::USB(Base* passThroughHandler)
 {
 }
 
-void Midi::Handler::USB::initMidi()
+void Midi::Handler::USB::initMidi(bool verbose)
 {
+   (void)verbose;
 #ifndef NON_DAISY_DEVICE
    daisy::MidiUsbHandler::Config midi_config;
    midi_config.transport_config.periph = daisy::MidiUsbTransport::Config::INTERNAL;

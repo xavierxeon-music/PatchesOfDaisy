@@ -10,6 +10,8 @@ using MidiUsbHandler = daisy::MidiUsbHandler;
 using MidiUsbHandler = Imposter::MidiUsbHandler;
 #endif // NON_DAISY_DEVICE
 
+#include <Remember.h>
+
 namespace Midi
 {
    namespace Handler
@@ -20,7 +22,7 @@ namespace Midi
          inline USB(Base* passThroughHandler = nullptr);
 
       public:
-         inline void initMidi() override;
+         inline void initMidi(bool verbose = false) override;
          inline void pollMidiReceive() override final;
 
          inline bool settingsUpdate(Remember::Root* root, const Midi::ControllerMessage& message, const uint8_t& value);
@@ -37,6 +39,8 @@ namespace Midi
    } // namespace Handler
 } // namespace Midi
 
+#ifndef MidiHandlerUSBHPP
 #include "MidiHandlerUSB.hpp"
+#endif // NOT MidiHandlerUSBHPP
 
 #endif // MidiHandlerUSBH
