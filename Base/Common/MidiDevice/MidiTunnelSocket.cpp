@@ -35,16 +35,17 @@ QAbstractSocket::SocketState Midi::Tunnel::Socket::getState() const
 
 void Midi::Tunnel::Socket::slotIncomingData()
 {
-   qDebug() << __FUNCTION__;
-
    buffer.append(socket->readAll());
    while (buffer.length() >= 3)
    {
+      qDebug() << __FUNCTION__ << buffer.size();
       const QByteArray messageBuffer = buffer.right(3);
       buffer.chop(3);
 
       Bytes message(3);
       std::memcpy(&message[0], (uint8_t*)messageBuffer.data(), 3);
+
+      qDebug() << message << buffer.size();
 
       const Midi::Channel channel = message[0] & 0x0F;
       if (Midi::Event::NoteOn == (message[0] & 0xF0))
