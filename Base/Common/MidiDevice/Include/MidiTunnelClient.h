@@ -13,6 +13,9 @@ namespace Midi
       public:
          Client(QObject* parent, const QString& serverName);
 
+      private slots:
+         void slotTryToConnectToHost();
+
       private:
          const QString serverName;
       };

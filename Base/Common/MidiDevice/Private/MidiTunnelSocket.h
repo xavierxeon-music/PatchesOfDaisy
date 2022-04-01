@@ -21,6 +21,7 @@ namespace Midi
 
       public:
          void setSocket(QTcpSocket* newSocket);
+         QAbstractSocket::SocketState getState() const;
 
       private slots:
          void slotIncomingData();

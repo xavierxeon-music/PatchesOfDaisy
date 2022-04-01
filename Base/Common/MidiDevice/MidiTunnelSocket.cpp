@@ -25,8 +25,18 @@ void Midi::Tunnel::Socket::setSocket(QTcpSocket* newSocket)
    }
 }
 
+QAbstractSocket::SocketState Midi::Tunnel::Socket::getState() const
+{
+   if (socket.isNull())
+      return QAbstractSocket::UnconnectedState;
+
+   return socket->state();
+}
+
 void Midi::Tunnel::Socket::slotIncomingData()
 {
+   qDebug() << __FUNCTION__;
+
    buffer.append(socket->readAll());
    while (buffer.length() >= 3)
    {
