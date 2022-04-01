@@ -1,16 +1,16 @@
-#include "SettingsUI.h"
+#include "AppSettings.h"
 
+#include <QCoreApplication>
 #include <QDir>
 #include <QFile>
-#include <QGuiApplication>
 #include <QJsonArray>
 #include <QJsonDocument>
 #include <QStandardPaths>
 
-QJsonObject SettingsUI::docObject = QJsonObject();
-quint32 SettingsUI::useCount = 0;
+QJsonObject AppSettings::docObject = QJsonObject();
+quint32 AppSettings::useCount = 0;
 
-SettingsUI::SettingsUI(const QString& groupName)
+AppSettings::AppSettings(const QString& groupName)
    : JSONTools::AbstractSettings(groupName)
 {
    if (0 == useCount) // read new object
@@ -28,7 +28,7 @@ SettingsUI::SettingsUI(const QString& groupName)
    useCount++;
 }
 
-SettingsUI::~SettingsUI()
+AppSettings::~AppSettings()
 {
    if (0 == useCount)
       Q_ASSERT(false); // this should not happen!
@@ -47,13 +47,13 @@ SettingsUI::~SettingsUI()
    file.close();
 }
 
-const QString& SettingsUI::fileName()
+const QString& AppSettings::fileName()
 {
    // do not make variable a class static, because QApplication needs to be constructed first!
    static const QString settingsFileName = [&]()
    {
-      const QString appName = QGuiApplication::applicationName();
-      const QString domainName = QGuiApplication::organizationDomain();
+      const QString appName = QCoreApplication::applicationName();
+      const QString domainName = QCoreApplication::organizationDomain();
       if (appName.isEmpty() || domainName.isEmpty())
          qFatal("Setings: must set app and domain first");
 
@@ -67,12 +67,12 @@ const QString& SettingsUI::fileName()
    return settingsFileName;
 }
 
-QJsonObject& SettingsUI::contentRef()
+QJsonObject& AppSettings::contentRef()
 {
    return docObject;
 }
 
-const QJsonObject& SettingsUI::content() const
+const QJsonObject& AppSettings::content() const
 {
    return docObject;
 }

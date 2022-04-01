@@ -3,12 +3,14 @@ CONFIG += precompile_header
 PRECOMPILED_HEADER += $$PWD/Global.h
 
 HEADERS += \
-   $$PWD/FileStorage.h \
-   $$PWD/SettingsUI.h
+   $$PWD/AppSettings.h \
+   $$PWD/ConsoleApplication.h \
+   $$PWD/FileStorage.h
 
 SOURCES += \
-   $$PWD/FileStorage.cpp \
-   $$PWD/SettingsUI.cpp
+   $$PWD/AppSettings.cpp \
+   $$PWD/ConsoleApplication.cpp \
+   $$PWD/FileStorage.cpp
 
 CONFIG(midi):include($$PWD/MidiDevice/MidiDevice.pri)
 CONFIG(audio):include($$PWD/AudioDevice/AudioDevice.pri)

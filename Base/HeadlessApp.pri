@@ -1,8 +1,6 @@
 # mark as imposter
 DEFINES += NON_DAISY_DEVICE
 
-QT += widgets
-
 macos:include($$PWD/mac.pri)
 
 include($$PWD/Common/CommonApp.pri)

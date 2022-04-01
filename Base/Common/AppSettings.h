@@ -1,13 +1,13 @@
-#ifndef SettingsUIH
-#define SettingsUIH
+#ifndef AppSettingsH
+#define AppSettingsH
 
 #include <JSONToolsAbstractSettings.h>
 
-class SettingsUI : public JSONTools::AbstractSettings
+class AppSettings : public JSONTools::AbstractSettings
 {
 public:
-   SettingsUI(const QString& groupName = QString());
-   ~SettingsUI();
+   AppSettings(const QString& groupName = QString());
+   ~AppSettings();
 
 public:
    static const QString& fileName();
@@ -21,4 +21,4 @@ private:
    static quint32 useCount;
 };
 
-#endif // SettingsUIH
+#endif // AppSettingsH

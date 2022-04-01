@@ -11,15 +11,23 @@ win32{
    LIBS += Winmm.lib
 }
 
+QT += network
+
 INCLUDEPATH += $$PWD/Include
 
 HEADERS += \
    $$PWD/Include/MidiBridge.h \
    $$PWD/Include/MidiBridge.hpp \
    $$PWD/Include/MidiDevice.h \
+   $$PWD/Include/MidiTunnelClient.h \
+   $$PWD/Include/MidiTunnelServer.h \
+   $$PWD/Private/MidiTunnelSocket.h \
    $$PWD/RtMidi4/RtMidi4.h
 
 SOURCES += \
    $$PWD/MidiBridge.cpp \
    $$PWD/MidiDevice.cpp \
+   $$PWD/MidiTunnelClient.cpp \
+   $$PWD/MidiTunnelServer.cpp \
+   $$PWD/MidiTunnelSocket.cpp \
    $$PWD/RtMidi4/RtMidi4.cpp
