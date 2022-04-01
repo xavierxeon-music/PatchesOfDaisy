@@ -56,12 +56,16 @@ void Midi::Tunnel::Socket::slotIncomingData()
          const Note note = Note::fromMidi(message[1]);
          const Midi::Velocity velocity = message[2];
 
+         qDebug() << "note on" << channel << note.midiValue << velocity;
+
          for (const NoteOnFunction& noteOnFunction : noteOnFunctionList)
             noteOnFunction(channel, note, velocity);
       }
       else if (Midi::Event::NoteOff == (message[0] & 0xF0))
       {
          const Note note = Note::fromMidi(message[1]);
+
+         qDebug() << "note off" << channel << note.midiValue;
 
          for (const NoteOffFunction& noteOffFunction : noteOffFunctionList)
             noteOffFunction(channel, note);
@@ -70,6 +74,8 @@ void Midi::Tunnel::Socket::slotIncomingData()
       {
          const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(message[1]);
          const uint8_t value = message[2];
+
+         qDebug() << "controller change" << channel << controllerMessage << value;
 
          for (const ControllChangeFunction& controllChangeFunction : controllChangeFunctionList)
             controllChangeFunction(channel, controllerMessage, value);
