@@ -8,7 +8,7 @@
 static const QString targetPortName = "Daisy Seed Built In";
 
 Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel)
-   : Device(targetPortName)
+   : Device(targetPortName, targetPortName)
    , root(root)
    , receiveChannel(receiveChannel)
    , loadedFromDaisyFunction(nullptr)

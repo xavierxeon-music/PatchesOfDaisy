@@ -11,7 +11,7 @@ namespace Midi
    {
 
    public:
-      Device(const QString& portName);
+      Device(const QString& inputPortName, const QString& outputPortName);
       virtual ~Device();
 
    public:
@@ -30,7 +30,8 @@ namespace Midi
       static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
 
    private:
-      const std::string portName; // rt midi does not us QString
+      const std::string inputPortName;  // rt midi does not us QString
+      const std::string outputPortName; // rt midi does not us QString
    };
 } // namespace Midi
 

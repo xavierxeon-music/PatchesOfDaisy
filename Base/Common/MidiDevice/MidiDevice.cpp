@@ -1,10 +1,11 @@
 #include "MidiDevice.h"
 
-Midi::Device::Device(const QString& portName)
+Midi::Device::Device(const QString& inputPortName, const QString& outputPortName)
    : Interface()
    , output()
    , input()
-   , portName(portName.toStdString())
+   , inputPortName(inputPortName.toStdString())
+   , outputPortName(outputPortName.toStdString())
 {
 }
 
@@ -79,7 +80,7 @@ void Midi::Device::openOutput(bool verbose)
       if (verbose)
          qDebug() << index << QString::fromStdString(testPortName);
 
-      if (portName != testPortName)
+      if (outputPortName != testPortName)
          continue;
 
       portNumber = index;
@@ -114,7 +115,7 @@ void Midi::Device::openInput(bool verbose)
       if (verbose)
          qDebug() << index << QString::fromStdString(testPortName);
 
-      if (portName != testPortName)
+      if (inputPortName != testPortName)
          continue;
 
       portNumber = index;
