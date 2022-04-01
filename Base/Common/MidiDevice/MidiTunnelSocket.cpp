@@ -36,7 +36,6 @@ QAbstractSocket::SocketState Midi::Tunnel::Socket::getState() const
 void Midi::Tunnel::Socket::slotIncomingData()
 {
    buffer.append(socket->readAll());
-   qDebug() << __FUNCTION__ << buffer.size();
    while (buffer.length() >= 3)
    {
       const QByteArray messageBuffer = buffer.right(3);
@@ -44,8 +43,6 @@ void Midi::Tunnel::Socket::slotIncomingData()
 
       Bytes message(3);
       std::memcpy(&message[0], (uint8_t*)messageBuffer.data(), 3);
-
-      qDebug() << message << buffer.size();
 
       for (Interface* passthrough : passthroughList)
          passthrough->sendBuffer(message);
