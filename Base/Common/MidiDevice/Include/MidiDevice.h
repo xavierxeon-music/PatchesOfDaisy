@@ -11,7 +11,7 @@ namespace Midi
    {
 
    public:
-      Device(const QString& inputPortName, const QString& outputPortName, Interface* passthrough = nullptr);
+      Device(const QString& inputPortName, const QString& outputPortName);
       virtual ~Device();
 
    public:
@@ -32,7 +32,6 @@ namespace Midi
    private:
       const std::string inputPortName;  // rt midi does not us QString
       const std::string outputPortName; // rt midi does not us QString
-      Interface* passthrough;
    };
 } // namespace Midi
 

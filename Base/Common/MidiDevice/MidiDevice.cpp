@@ -1,12 +1,11 @@
 #include "MidiDevice.h"
 
-Midi::Device::Device(const QString& inputPortName, const QString& outputPortName, Interface* passthrough)
+Midi::Device::Device(const QString& inputPortName, const QString& outputPortName)
    : Interface()
    , output()
    , input()
    , inputPortName(inputPortName.toStdString())
    , outputPortName(outputPortName.toStdString())
-   , passthrough(passthrough)
 {
 }
 
@@ -64,8 +63,6 @@ void Midi::Device::dataFromInput(const Bytes& message)
       for (const ControllChangeFunction& controllChangeFunction : controllChangeFunctionList)
          controllChangeFunction(channel, controllerMessage, value);
    }
-   if (passthrough)
-      passthrough->sendBuffer(message);
 }
 
 void Midi::Device::openOutput(bool verbose)
@@ -165,8 +162,8 @@ void Midi::Device::midiReceive(double timeStamp, std::vector<unsigned char>* mes
       if (0 == buffer.size())
          return;
 
-      if (me->passthrough)
-         me->passthrough->sendBuffer(buffer);
+      for (Interface* passthrough : me->passthroughList)
+         passthrough->sendBuffer(buffer);
 
       me->dataFromInput(buffer); // may cause threading issues, since callback is not in main thread
 
