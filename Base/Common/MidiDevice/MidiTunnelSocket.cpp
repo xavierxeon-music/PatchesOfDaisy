@@ -47,6 +47,9 @@ void Midi::Tunnel::Socket::slotIncomingData()
 
       qDebug() << message << buffer.size();
 
+      for (Interface* passthrough : passthroughList)
+         passthrough->sendBuffer(message);
+
       const Midi::Channel channel = message[0] & 0x0F;
       if (Midi::Event::NoteOn == (message[0] & 0xF0))
       {
