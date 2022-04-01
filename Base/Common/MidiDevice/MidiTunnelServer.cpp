@@ -14,5 +14,5 @@ void Midi::Tunnel::Server::slotHasNewConnection()
 {
    QTcpSocket* newSocket = server->nextPendingConnection();
    setSocket(newSocket);
-   qInfo() << "new connection" << newSocket->peerAddress() << newSocket;
+   qInfo() << "new connection";
 }
