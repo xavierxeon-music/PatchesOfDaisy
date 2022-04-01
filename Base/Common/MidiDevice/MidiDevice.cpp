@@ -1,10 +1,10 @@
 #include "MidiDevice.h"
 
-Midi::Device::Device(const std::string portName)
+Midi::Device::Device(const QString& portName)
    : Interface()
    , output()
    , input()
-   , portName(portName)
+   , portName(portName.toStdString())
 {
 }
 

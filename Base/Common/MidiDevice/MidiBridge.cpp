@@ -5,7 +5,7 @@
 #include <Midi/MidiCommon.h>
 #include <Tools/SevenBit.h>
 
-static const std::string targetPortName = "Daisy Seed Built In";
+static const QString targetPortName = "Daisy Seed Built In";
 
 Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel)
    : Device(targetPortName)

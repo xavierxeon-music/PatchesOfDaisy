@@ -14,7 +14,7 @@ namespace Midi
       using LoadedFromDaisyFunction = std::function<void()>;
 
    public:
-      Bridge(Remember::Root* root = nullptr, const Midi::Channel& receiveChannel = 0);
+      Bridge(Remember::Root* root = nullptr, const Midi::Channel& receiveChannel = 6);
 
    public:
       template <typename ClassType>
