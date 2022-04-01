@@ -39,8 +39,8 @@ void Midi::Tunnel::Socket::slotIncomingData()
    qDebug() << __FUNCTION__ << buffer.size();
    while (buffer.length() >= 3)
    {
-      const QByteArray messageBuffer = buffer.right(3);
-      buffer.chop(3);
+      const QByteArray messageBuffer = buffer.left(3);
+      buffer.remove(0, 3);
 
       Bytes message(3);
       std::memcpy(&message[0], (uint8_t*)messageBuffer.data(), 3);
