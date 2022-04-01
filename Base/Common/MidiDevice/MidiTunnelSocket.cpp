@@ -45,8 +45,6 @@ void Midi::Tunnel::Socket::slotIncomingData()
       Bytes message(3);
       std::memcpy(&message[0], (uint8_t*)messageBuffer.data(), 3);
 
-      qDebug() << message << buffer.size();
-
       for (Interface* passthrough : passthroughList)
          passthrough->sendBuffer(message);
 
