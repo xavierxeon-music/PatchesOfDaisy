@@ -12,6 +12,7 @@ win32{
 }
 
 linux {
+   DEFINES += __UNIX_JACK__
    LIBS += -ljack
 }
 
