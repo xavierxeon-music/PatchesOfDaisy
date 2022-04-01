@@ -11,6 +11,10 @@ win32{
    LIBS += Winmm.lib
 }
 
+linux {
+   LIBS += -ljack
+}
+
 QT += network
 
 INCLUDEPATH += $$PWD/Include
