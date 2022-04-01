@@ -36,9 +36,9 @@ QAbstractSocket::SocketState Midi::Tunnel::Socket::getState() const
 void Midi::Tunnel::Socket::slotIncomingData()
 {
    buffer.append(socket->readAll());
+   qDebug() << __FUNCTION__ << buffer.size();
    while (buffer.length() >= 3)
    {
-      qDebug() << __FUNCTION__ << buffer.size();
       const QByteArray messageBuffer = buffer.right(3);
       buffer.chop(3);
 
