@@ -39,7 +39,6 @@ QAbstractSocket::SocketState Midi::Tunnel::Socket::getState() const
 void Midi::Tunnel::Socket::slotIncomingData()
 {
    buffer.append(socket->readAll());
-   qDebug() << __FUNCTION__ << buffer.size();
    while (buffer.length() >= 3)
    {
       const QByteArray messageBuffer = buffer.left(3);
@@ -59,16 +58,12 @@ void Midi::Tunnel::Socket::slotIncomingData()
          const Note note = Note::fromMidi(message[1]);
          const Midi::Velocity velocity = message[2];
 
-         qDebug() << "note on" << channel << note.midiValue << velocity;
-
          for (const NoteOnFunction& noteOnFunction : noteOnFunctionList)
             noteOnFunction(channel, note, velocity);
       }
       else if (Midi::Event::NoteOff == event)
       {
          const Note note = Note::fromMidi(message[1]);
-
-         qDebug() << "note off" << channel << note.midiValue;
 
          for (const NoteOffFunction& noteOffFunction : noteOffFunctionList)
             noteOffFunction(channel, note);
@@ -77,8 +72,6 @@ void Midi::Tunnel::Socket::slotIncomingData()
       {
          const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(message[1]);
          const uint8_t value = message[2];
-
-         qDebug() << "controller change" << channel << controllerMessage << value;
 
          for (const ControllChangeFunction& controllChangeFunction : controllChangeFunctionList)
             controllChangeFunction(channel, controllerMessage, value);
