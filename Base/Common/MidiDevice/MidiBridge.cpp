@@ -6,6 +6,7 @@
 #include <Tools/SevenBit.h>
 
 static const QString targetPortName = "Daisy Seed Built In";
+static const Midi::Channel daisyChannel = 8;
 
 Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel)
    : Device::Input(targetPortName)
@@ -20,7 +21,7 @@ Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel)
 void Midi::Bridge::requestLoadFromDaisy()
 {
    Bytes message;
-   message << (Midi::Event::ControlChange | 0); // control change @ channel 1
+   message << (Midi::Event::ControlChange | daisyChannel);
    message << Midi::ControllerMessage::RememberRequest;
    message << 0;
 
@@ -37,7 +38,7 @@ void Midi::Bridge::saveToDaisy()
 
    Bytes message(3);
 
-   message[0] = (Midi::Event::ControlChange | 0); // control change @ channel 1
+   message[0] = (Midi::Event::ControlChange | daisyChannel);
    message[1] = Midi::ControllerMessage::RememberBlock;
 
    for (const uint8_t byte : dataBase64)
