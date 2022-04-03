@@ -1,4 +1,4 @@
-#include "Include/MidiBridge.h"
+#include <Midi/MidiBridge.h>
 
 #include <QThread>
 
@@ -8,7 +8,8 @@
 static const QString targetPortName = "Daisy Seed Built In";
 
 Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel)
-   : Device(targetPortName, targetPortName)
+   : Device::Input(targetPortName)
+   , Device::Output(targetPortName)
    , root(root)
    , receiveChannel(receiveChannel)
    , loadedFromDaisyFunction(nullptr)

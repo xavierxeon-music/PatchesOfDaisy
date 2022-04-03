@@ -21,17 +21,19 @@ QT += network
 INCLUDEPATH += $$PWD/Include
 
 HEADERS += \
-   $$PWD/Include/MidiBridge.h \
-   $$PWD/Include/MidiBridge.hpp \
-   $$PWD/Include/MidiDevice.h \
-   $$PWD/Include/MidiTunnelClient.h \
-   $$PWD/Include/MidiTunnelServer.h \
+   $$PWD/Include/Midi/MidiBridge.h \
+   $$PWD/Include/Midi/MidiBridge.hpp \
+   $$PWD/Include/Midi/MidiDeviceInput.h \
+   $$PWD/Include/Midi/MidiDeviceOutput.h \
+   $$PWD/Include/Midi/MidiTunnelClient.h \
+   $$PWD/Include/Midi/MidiTunnelServer.h \
    $$PWD/Private/MidiTunnelSocket.h \
    $$PWD/RtMidi4/RtMidi4.h
 
 SOURCES += \
    $$PWD/MidiBridge.cpp \
-   $$PWD/MidiDevice.cpp \
+   $$PWD/MidiDeviceInput.cpp \
+   $$PWD/MidiDeviceOutput.cpp \
    $$PWD/MidiTunnelClient.cpp \
    $$PWD/MidiTunnelServer.cpp \
    $$PWD/MidiTunnelSocket.cpp \

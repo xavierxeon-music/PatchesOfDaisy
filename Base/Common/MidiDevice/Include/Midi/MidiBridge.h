@@ -1,14 +1,15 @@
 #ifndef MidiBridgeH
 #define MidiBridgeH
 
-#include "MidiDevice.h"
+#include "MidiDeviceInput.h"
+#include "MidiDeviceOutput.h"
 
 #include <Remember.h>
 
 namespace Midi
 {
    // midi connection to a dasiy seed via usb
-   class Bridge : public Device
+   class Bridge : public Device::Input, public Device::Output
    {
    public:
       using LoadedFromDaisyFunction = std::function<void()>;
