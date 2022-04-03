@@ -21,4 +21,4 @@ private:
    static quint32 useCount;
 };
 
-#endif // AppSettingsH
+#endif // NOT AppSettingsH
