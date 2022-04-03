@@ -5,8 +5,9 @@
 
 #include <Tools/SevenBit.h>
 
-Midi::Handler::USB::USB(Base* passThroughHandler)
-   : Base(0, passThroughHandler)
+Midi::Handler::USB::USB(Base* passThroughHandler, const Channel& receiveChannel, const Channel& sendChannel)
+   : Base(receiveChannel, passThroughHandler)
+   , sendChannel(sendChannel)
    , midi2()
    , receivedDataBase64()
    , toBeSentDataBase64()
@@ -43,7 +44,7 @@ void Midi::Handler::USB::pollMidiReceive()
       toBeSentDataBase64.clear();
 
       Bytes message(3);
-      message[0] = (Midi::Event::ControlChange | 0); // control change @ channel 1
+      message[0] = (Midi::Event::ControlChange | sendChannel);
       message[1] = Midi::ControllerMessage::RememberApply;
       message[2] = 0;
       sendBuffer(message);
@@ -51,7 +52,7 @@ void Midi::Handler::USB::pollMidiReceive()
    else
    {
       Bytes message(3);
-      message[0] = (Midi::Event::ControlChange | 0); // control change @ channel 1
+      message[0] = (Midi::Event::ControlChange | sendChannel);
       message[1] = Midi::ControllerMessage::RememberBlock;
       message[2] = toBeSentDataBase64.at(sendIndex);
       sendBuffer(message);

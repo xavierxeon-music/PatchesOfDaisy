@@ -3,7 +3,7 @@
 
 #include <Midi/MidiHandlerInternal.h>
 
-Midi::Handler::Internal::Internal(DaisyPatch* daisy, const Channel& receiveChannel, Base* passThroughHandler)
+Midi::Handler::Internal::Internal(DaisyPatch* daisy, Base* passThroughHandler, const Channel& receiveChannel)
    : Base(receiveChannel, passThroughHandler)
 #ifndef NON_DAISY_DEVICE
    , midi1(daisy->midi)

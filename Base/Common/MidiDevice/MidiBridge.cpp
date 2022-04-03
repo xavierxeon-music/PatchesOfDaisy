@@ -7,10 +7,11 @@
 
 static const QString targetPortName = "Daisy Seed Built In";
 
-Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel)
+Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel, const Midi::Channel& sendChannel)
    : Device(targetPortName, targetPortName)
    , root(root)
    , receiveChannel(receiveChannel)
+   , sendChannel(sendChannel)
    , loadedFromDaisyFunction(nullptr)
 {
    onReceiveControllChange(this, &Midi::Bridge::checkLoadFromDaisy);
@@ -19,7 +20,7 @@ Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel)
 void Midi::Bridge::requestLoadFromDaisy()
 {
    Bytes message;
-   message << (Midi::Event::ControlChange | 0); // control change @ channel 1
+   message << (Midi::Event::ControlChange | sendChannel);
    message << Midi::ControllerMessage::RememberRequest;
    message << 0;
 
@@ -36,7 +37,7 @@ void Midi::Bridge::saveToDaisy()
 
    Bytes message(3);
 
-   message[0] = (Midi::Event::ControlChange | 0); // control change @ channel 1
+   message[0] = (Midi::Event::ControlChange | sendChannel);
    message[1] = Midi::ControllerMessage::RememberBlock;
 
    for (const uint8_t byte : dataBase64)

@@ -12,7 +12,7 @@ namespace Midi
       class Internal : public Base
       {
       public:
-         inline Internal(DaisyPatch* daisy, const Channel& receiveChannel, Base* passThroughHandler);
+         inline Internal(DaisyPatch* daisy, Base* passThroughHandler, const Channel& receiveChannel = 8);
 
       public:
          inline void initMidi(bool verbose = false) override;
