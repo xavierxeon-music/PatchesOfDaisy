@@ -1,4 +1,4 @@
-#include "MidiTunnelClient.h"
+#include <Midi/MidiTunnelClient.h>
 
 #include <QTimer>
 

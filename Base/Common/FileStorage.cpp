@@ -1,5 +1,7 @@
 #include "FileStorage.h"
 
+#include <cstring>
+
 #include <QFile>
 
 FileStorage::FileStorage(Remember::Root* root)

@@ -1,40 +1,29 @@
-#include "MidiDevice.h"
+#include <Midi/MidiDeviceInput.h>
 
-Midi::Device::Device(const QString& inputPortName, const QString& outputPortName)
-   : Interface()
-   , output()
+#include <Midi/MidiInterfaceOutput.h>
+
+Midi::Device::Input::Input(const QString& inputPortName)
+   : Interface::Input()
    , input()
    , inputPortName(inputPortName.toStdString())
-   , outputPortName(outputPortName.toStdString())
 {
 }
 
-Midi::Device::~Device()
+Midi::Device::Input::~Input()
 {
-   if (output.isPortOpen())
-   {
-      output.closePort();
-      qDebug() << "closed midi output port";
-   }
    if (input.isPortOpen())
    {
       input.closePort();
-      qDebug() << "closed midi input port";
+      qInfo() << "closed midi input port";
    }
 }
 
-void Midi::Device::initMidi(bool verbose)
+void Midi::Device::Input::initMidi(bool verbose)
 {
-   openOutput(verbose);
    openInput(verbose);
 }
 
-void Midi::Device::sendBuffer(const Bytes& buffer)
-{
-   output.sendMessage(&buffer);
-}
-
-void Midi::Device::dataFromInput(const Bytes& message)
+void Midi::Device::Input::dataFromInput(const Bytes& message)
 {
    if (message.size() != 3)
       return;
@@ -65,48 +54,13 @@ void Midi::Device::dataFromInput(const Bytes& message)
    }
 }
 
-void Midi::Device::openOutput(bool verbose)
-{
-   if (output.isPortOpen())
-      return;
-
-   if (verbose)
-      qDebug() << "available outputs:";
-
-   uint portNumber = 255;
-   for (uint index = 0; index < output.getPortCount(); index++)
-   {
-      const std::string testPortName = output.getPortName(index);
-      if (verbose)
-         qDebug() << index << QString::fromStdString(testPortName);
-
-      if (outputPortName != testPortName)
-         continue;
-
-      portNumber = index;
-      break;
-   }
-
-   if (255 != portNumber)
-   {
-      output.openPort(portNumber);
-      output.setErrorCallback(&Midi::Device::midiError, this);
-
-      qInfo() << "opened midi output port" << portNumber;
-   }
-   else
-   {
-      qWarning() << "unable to open midi output";
-   }
-}
-
-void Midi::Device::openInput(bool verbose)
+void Midi::Device::Input::openInput(bool verbose)
 {
    if (input.isPortOpen())
       return;
 
    if (verbose)
-      qDebug() << "available inputs:";
+      qInfo() << "available inputs:";
 
    uint portNumber = 255;
    for (uint index = 0; index < input.getPortCount(); index++)
@@ -125,9 +79,9 @@ void Midi::Device::openInput(bool verbose)
    {
       input.openPort(portNumber);
 
-      input.setErrorCallback(&Midi::Device::midiError, nullptr);
-      input.setCallback(&Midi::Device::midiReceive, this);
-      input.ignoreTypes(true, true, false); // ignore sysex and time
+      input.setErrorCallback(&Midi::Device::Input::midiError);
+      input.setCallback(&Midi::Device::Input::midiReceive, this);
+      input.ignoreTypes(false, false, false); // do not ignore anything
 
       qInfo() << "opened midi input port" << portNumber;
    }
@@ -137,22 +91,21 @@ void Midi::Device::openInput(bool verbose)
    }
 }
 
-void Midi::Device::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
+void Midi::Device::Input::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
 {
-   if (nullptr != userData) // output
-      qDebug() << "output" << type << QString::fromStdString(errorText);
-   else
-      qDebug() << "input" << type << QString::fromStdString(errorText);
+   Q_UNUSED(userData)
+
+   qInfo() << "input" << type << QString::fromStdString(errorText);
 }
 
-void Midi::Device::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
+void Midi::Device::Input::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)
 {
    Q_UNUSED(timeStamp)
 
    if (!message || !userData)
       return;
 
-   Device* me = reinterpret_cast<Device*>(userData);
+   Input* me = reinterpret_cast<Input*>(userData);
    if (!me)
       return;
 
@@ -162,7 +115,7 @@ void Midi::Device::midiReceive(double timeStamp, std::vector<unsigned char>* mes
       if (0 == buffer.size())
          return;
 
-      for (Interface* passthrough : me->passthroughList)
+      for (Interface::Output* passthrough : me->passthroughList)
          passthrough->sendBuffer(buffer);
 
       me->dataFromInput(buffer); // may cause threading issues, since callback is not in main thread

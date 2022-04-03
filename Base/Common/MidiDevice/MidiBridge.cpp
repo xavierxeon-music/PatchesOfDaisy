@@ -1,4 +1,4 @@
-#include "Include/MidiBridge.h"
+#include <Midi/MidiBridge.h>
 
 #include <QThread>
 
@@ -7,11 +7,12 @@
 
 static const QString targetPortName = "Daisy Seed Built In";
 
-Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel, const Midi::Channel& sendChannel)
-   : Device(targetPortName, targetPortName)
+Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel, const Midi::Channel& daisyChannel)
+   : Device::Input(targetPortName)
+   , Device::Output(targetPortName)
    , root(root)
    , receiveChannel(receiveChannel)
-   , sendChannel(sendChannel)
+   , daisyChannel(daisyChannel)
    , loadedFromDaisyFunction(nullptr)
 {
    onReceiveControllChange(this, &Midi::Bridge::checkLoadFromDaisy);
@@ -20,7 +21,8 @@ Midi::Bridge::Bridge(Remember::Root* root, const Midi::Channel& receiveChannel, 
 void Midi::Bridge::requestLoadFromDaisy()
 {
    Bytes message;
-   message << (Midi::Event::ControlChange | sendChannel);
+
+   message << (Midi::Event::ControlChange | daisyChannel);
    message << Midi::ControllerMessage::RememberRequest;
    message << 0;
 
@@ -37,7 +39,7 @@ void Midi::Bridge::saveToDaisy()
 
    Bytes message(3);
 
-   message[0] = (Midi::Event::ControlChange | sendChannel);
+   message[0] = (Midi::Event::ControlChange | daisyChannel);
    message[1] = Midi::ControllerMessage::RememberBlock;
 
    for (const uint8_t byte : dataBase64)

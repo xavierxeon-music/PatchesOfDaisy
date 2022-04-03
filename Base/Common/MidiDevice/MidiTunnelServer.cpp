@@ -1,4 +1,4 @@
-#include "MidiTunnelServer.h"
+#include <Midi/MidiTunnelServer.h>
 
 Midi::Tunnel::Server::Server(QObject* parent)
    : Socket(parent)

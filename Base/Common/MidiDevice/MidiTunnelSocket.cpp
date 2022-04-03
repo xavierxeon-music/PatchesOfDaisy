@@ -1,10 +1,13 @@
 #include "Private/MidiTunnelSocket.h"
 
+#include <cstring>
+
 const int Midi::Tunnel::Socket::port = 6666;
 
 Midi::Tunnel::Socket::Socket(QObject* parent)
    : QObject(parent)
-   , Interface()
+   , Interface::Input()
+   , Interface::Output()
    , socket()
    , buffer()
 {
@@ -45,7 +48,7 @@ void Midi::Tunnel::Socket::slotIncomingData()
       Bytes message(3);
       std::memcpy(&message[0], (uint8_t*)messageBuffer.data(), 3);
 
-      for (Interface* passthrough : passthroughList)
+      for (Interface::Output* passthrough : passthroughList)
          passthrough->sendBuffer(message);
 
       const Midi::Channel channel = message[0] & 0x0F;

@@ -1,20 +1,21 @@
 #ifndef MidiBridgeH
 #define MidiBridgeH
 
-#include "MidiDevice.h"
+#include "MidiDeviceInput.h"
+#include "MidiDeviceOutput.h"
 
 #include <Remember.h>
 
 namespace Midi
 {
    // midi connection to a dasiy seed via usb
-   class Bridge : public Device
+   class Bridge : public Device::Input, public Device::Output
    {
    public:
       using LoadedFromDaisyFunction = std::function<void()>;
 
    public:
-      Bridge(Remember::Root* root = nullptr, const Midi::Channel& receiveChannel = 11, const Midi::Channel& sendChannel = 8);
+      Bridge(Remember::Root* root = nullptr, const Midi::Channel& receiveChannel = 11, const Midi::Channel& daisyChannel = 8);
 
    public:
       template <typename ClassType>
@@ -29,7 +30,7 @@ namespace Midi
    private:
       Remember::Root* root;
       const Midi::Channel receiveChannel;
-      const Midi::Channel sendChannel;
+      const Midi::Channel daisyChannel;
 
       LoadedFromDaisyFunction loadedFromDaisyFunction;
    };
