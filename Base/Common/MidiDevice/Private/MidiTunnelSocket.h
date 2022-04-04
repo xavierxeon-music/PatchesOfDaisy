@@ -28,7 +28,7 @@ namespace Midi
          void slotIncomingData();
 
       private:
-         void sendBuffer(const Bytes& buffer) override;
+         void sendBuffer(const Bytes& message) override;
 
       private:
          QPointer<QTcpSocket> socket;

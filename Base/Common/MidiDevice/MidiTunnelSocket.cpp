@@ -4,6 +4,8 @@
 
 #include <QThread>
 
+#include <QCoreApplication>
+
 const int Midi::Tunnel::Socket::port = 6666;
 
 Midi::Tunnel::Socket::Socket(QObject* parent)
@@ -56,13 +58,13 @@ void Midi::Tunnel::Socket::slotIncomingData()
    }
 }
 
-void Midi::Tunnel::Socket::sendBuffer(const Bytes& buffer)
+void Midi::Tunnel::Socket::sendBuffer(const Bytes& message)
 {
-   if (socket.isNull())
+   if (socket.isNull() || !socket->isOpen())
       return;
 
-   const char* data = (const char*)buffer.data();
-   socket->write(data, buffer.size());
+   const char* data = (const char*)message.data();
+   socket->write(data, message.size());
 
    socket->flush();
    QThread::msleep(1);
