@@ -24,7 +24,6 @@ HEADERS += \
    $$PWD/Include/Midi/MidiDeviceInput.h \
    $$PWD/Include/Midi/MidiDeviceOutput.h \
    $$PWD/Include/Midi/MidiToolBridge.h \
-   $$PWD/Include/Midi/MidiToolGate.h \
    $$PWD/Include/Midi/MidiTunnelClient.h \
    $$PWD/Include/Midi/MidiTunnelServer.h \
    $$PWD/Include/Midi/MidiVirtualInput.h \
@@ -37,7 +36,6 @@ SOURCES += \
    $$PWD/MidiDeviceInput.cpp \
    $$PWD/MidiDeviceOutput.cpp \
    $$PWD/MidiToolBridge.cpp \
-   $$PWD/MidiToolGate.cpp \
    $$PWD/MidiTunnelClient.cpp \
    $$PWD/MidiTunnelServer.cpp \
    $$PWD/MidiTunnelSocket.cpp \

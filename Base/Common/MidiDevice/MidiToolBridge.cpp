@@ -6,13 +6,12 @@
 
 Midi::Tool::Bridge::Bridge(Remember::Root* root, Interface::Input* input, Interface::Output* output, const Channel& myChannel, const Channel& remoteChannel)
    : root(root)
-   , input(input)
    , output(output)
    , myChannel(myChannel)
    , remoteChannel(remoteChannel)
    , pulledFromRemoteFunction(nullptr)
 {
-   input->onReceiveControllChange(this, &Bridge::checkRequests);
+   input->onControllChange(this, &Bridge::checkRequests);
 }
 
 void Midi::Tool::Bridge::requestPullFromRemote()

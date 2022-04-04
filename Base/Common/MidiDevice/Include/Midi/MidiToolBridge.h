@@ -32,7 +32,6 @@ namespace Midi
 
       private:
          Remember::Root* root;
-         Interface::Input* input;
          Interface::Output* output;
          const Midi::Channel myChannel;
          const Midi::Channel remoteChannel;

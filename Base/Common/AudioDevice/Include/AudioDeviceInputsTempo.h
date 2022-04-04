@@ -1,7 +1,7 @@
 #ifndef AudioDeviceInputsTempoH
 #define AudioDeviceInputsTempoH
 
-#include <Music/Tempo.h>
+#include <Music/TriggerdTempo.h>
 
 #include <functional>
 
@@ -9,7 +9,7 @@
 
 namespace AudioDevice
 {
-   class InputsTempo : public Tempo
+   class InputsTempo : public TriggerdTempo
    {
    public:
       using ClockFunction = std::function<void()>;
