@@ -13,6 +13,7 @@ Midi::Tunnel::Socket::Socket(QObject* parent)
    , Interface::Input()
    , Interface::Output()
    , socket()
+   , buffer()
 {
 }
 
@@ -25,6 +26,7 @@ void Midi::Tunnel::Socket::setSocket(QTcpSocket* newSocket)
    }
 
    socket = newSocket;
+   buffer.clear();
    if (socket)
    {
       connect(socket, &QTcpSocket::readyRead, this, &Socket::slotIncomingData);
@@ -41,32 +43,20 @@ QAbstractSocket::SocketState Midi::Tunnel::Socket::getState() const
 
 void Midi::Tunnel::Socket::slotIncomingData()
 {
-   QByteArray buffer = socket->readAll();
-   static const uint8_t mask = 0x80;
-
-   qsizetype startIndex = 0;
-   for (qsizetype index = 0; index < buffer.size(); index++)
+   buffer.append(socket->readAll());
+   while (buffer.size() > 0)
    {
-      const uint8_t byte = buffer.at(index);
+      const uint8_t messageSize = static_cast<const uint8_t>(buffer.at(0));
+      if (buffer.size() < messageSize + 1)
+         break;
 
-      if (index + 1 == buffer.size())
-         index += 1;
+      QByteArray messageData = buffer.mid(1, messageSize);
+      buffer.remove(0, messageSize + 1);
 
-      const bool messageStart = (mask == (byte & mask));
-      if ((messageStart && index != startIndex) // mew message, but not first entry
-          || (index == buffer.size()))          // end of buffer
-      {
-         const qsizetype length = index - startIndex;
-         Bytes message(length);
-         std::memcpy(&message[0], (uint8_t*)buffer.mid(startIndex, length).data(), length);
+      Bytes message(messageSize);
+      std::memcpy(&message[0], messageData.constData(), messageSize);
 
-         for (Interface::Output* passthrough : passthroughList)
-            passthrough->sendBuffer(message);
-
-         dataFromInput(message);
-
-         startIndex = index;
-      }
+      dataFromInput(message);
    }
 }
 
@@ -75,8 +65,11 @@ void Midi::Tunnel::Socket::sendBuffer(const Bytes& message)
    if (socket.isNull() || !socket->isOpen())
       return;
 
-   const char* data = (const char*)message.data();
-   socket->write(data, message.size());
+   QByteArray data((const char*)message.data(), message.size());
+   const uint8_t messageSize = message.size();
+   data.prepend(messageSize);
+
+   socket->write(data);
 
    socket->flush();
    QThread::msleep(1);
