@@ -9,16 +9,22 @@ Midi::Device::Output::Output(const QString& outputPortName)
 
 Midi::Device::Output::~Output()
 {
-   if (output.isPortOpen())
-   {
-      output.closePort();
-      qInfo() << "closed midi output port";
-   }
+   Device::Output::close();
 }
 
-void Midi::Device::Output::initMidi(bool verbose)
+void Midi::Device::Output::open()
 {
+   bool verbose = false;
    openOutput(verbose);
+}
+
+void Midi::Device::Output::close()
+{
+   if (!output.isPortOpen())
+      return;
+
+   output.closePort();
+   qInfo() << "closed midi output port";
 }
 
 void Midi::Device::Output::sendBuffer(const Bytes& buffer)
@@ -51,7 +57,7 @@ void Midi::Device::Output::openOutput(bool verbose)
    if (255 != portNumber)
    {
       output.openPort(portNumber);
-      output.setErrorCallback(&Midi::Device::Output::midiError);
+      output.setErrorCallback(&Device::Output::midiError);
 
       qInfo() << "opened midi output port" << portNumber;
    }

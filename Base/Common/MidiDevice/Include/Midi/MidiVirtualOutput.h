@@ -1,5 +1,5 @@
-#ifndef MidiDeviceOutputH
-#define MidiDeviceOutputH
+#ifndef MidiVirtualOutputH
+#define MidiVirtualOutputH
 
 #include <Midi/MidiInterfaceOutput.h>
 
@@ -7,9 +7,9 @@
 
 namespace Midi
 {
-   namespace Device
+   namespace Virtual
    {
-      // connect to an existing output
+      // creates a virtual midi output
       class Output : public Interface::Output
       {
       public:
@@ -25,13 +25,13 @@ namespace Midi
 
       private:
          void sendBuffer(const Bytes& buffer) override;
-         void openOutput(bool verbose);
          static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
 
       private:
-         const std::string outputPortName; // rt midi does not use QString
+         const QString outputPortName;
+         bool isOpen;
       };
-   } // namespace Device
+   } // namespace Virtual
 } // namespace Midi
 
-#endif // NOT MidiDeviceOutputH
+#endif // NOT MidiVirtualOutputH

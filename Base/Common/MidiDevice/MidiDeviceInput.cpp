@@ -11,47 +11,22 @@ Midi::Device::Input::Input(const QString& inputPortName)
 
 Midi::Device::Input::~Input()
 {
-   if (input.isPortOpen())
-   {
-      input.closePort();
-      qInfo() << "closed midi input port";
-   }
+   Device::Input::close();
 }
 
-void Midi::Device::Input::initMidi(bool verbose)
+void Midi::Device::Input::open()
 {
+   bool verbose = false;
    openInput(verbose);
 }
 
-void Midi::Device::Input::dataFromInput(const Bytes& message)
+void Midi::Device::Input::close()
 {
-   if (message.size() != 3)
+   if (!input.isPortOpen())
       return;
 
-   const Midi::Channel channel = message[0] & 0x0F;
-   if (Midi::Event::NoteOn == (message[0] & 0xF0))
-   {
-      const Note note = Note::fromMidi(message[1]);
-      const Midi::Velocity velocity = message[2];
-
-      for (const NoteOnFunction& noteOnFunction : noteOnFunctionList)
-         noteOnFunction(channel, note, velocity);
-   }
-   else if (Midi::Event::NoteOff == (message[0] & 0xF0))
-   {
-      const Note note = Note::fromMidi(message[1]);
-
-      for (const NoteOffFunction& noteOffFunction : noteOffFunctionList)
-         noteOffFunction(channel, note);
-   }
-   else if (Midi::Event::ControlChange == (message[0] & 0xF0))
-   {
-      const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(message[1]);
-      const uint8_t value = message[2];
-
-      for (const ControllChangeFunction& controllChangeFunction : controllChangeFunctionList)
-         controllChangeFunction(channel, controllerMessage, value);
-   }
+   input.closePort();
+   qInfo() << "closed midi input port";
 }
 
 void Midi::Device::Input::openInput(bool verbose)
@@ -79,8 +54,8 @@ void Midi::Device::Input::openInput(bool verbose)
    {
       input.openPort(portNumber);
 
-      input.setErrorCallback(&Midi::Device::Input::midiError);
-      input.setCallback(&Midi::Device::Input::midiReceive, this);
+      input.setErrorCallback(&Device::Input::midiError);
+      input.setCallback(&Device::Input::midiReceive, this);
       input.ignoreTypes(false, false, false); // do not ignore anything
 
       qInfo() << "opened midi input port" << portNumber;

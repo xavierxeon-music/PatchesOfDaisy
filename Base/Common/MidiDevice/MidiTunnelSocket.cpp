@@ -50,32 +50,7 @@ void Midi::Tunnel::Socket::slotIncomingData()
       for (Interface::Output* passthrough : passthroughList)
          passthrough->sendBuffer(message);
 
-      const Midi::Channel channel = message[0] & 0x0F;
-      const Midi::Event event = static_cast<Midi::Event>(message[0] & 0xF0);
-
-      if (Midi::Event::NoteOn == event)
-      {
-         const Note note = Note::fromMidi(message[1]);
-         const Midi::Velocity velocity = message[2];
-
-         for (const NoteOnFunction& noteOnFunction : noteOnFunctionList)
-            noteOnFunction(channel, note, velocity);
-      }
-      else if (Midi::Event::NoteOff == event)
-      {
-         const Note note = Note::fromMidi(message[1]);
-
-         for (const NoteOffFunction& noteOffFunction : noteOffFunctionList)
-            noteOffFunction(channel, note);
-      }
-      else if (Midi::Event::ControlChange == event)
-      {
-         const Midi::ControllerMessage controllerMessage = static_cast<Midi::ControllerMessage>(message[1]);
-         const uint8_t value = message[2];
-
-         for (const ControllChangeFunction& controllChangeFunction : controllChangeFunctionList)
-            controllChangeFunction(channel, controllerMessage, value);
-      }
+      dataFromInput(message);
    }
 }
 

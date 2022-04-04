@@ -1,7 +1,7 @@
 # mark as imposter
 DEFINES += NON_DAISY_DEVICE
 
-QT += widgets
+QT += widgets svg
 
 macos:include($$PWD/mac.pri)
 

@@ -7,6 +7,7 @@ namespace Midi
 {
    namespace Tunnel
    {
+      // tunnel an input and output interface via tcp
       class Client : public Socket
       {
          Q_OBJECT

@@ -1,5 +1,5 @@
-#ifndef MidiDeviceInputH
-#define MidiDeviceInputH
+#ifndef MidiVirtualInputH
+#define MidiVirtualInputH
 
 #include <Midi/MidiInterfaceInput.h>
 
@@ -7,9 +7,9 @@
 
 namespace Midi
 {
-   namespace Device
+   namespace Virtual
    {
-      // connect to an existing input
+      // creates a virtual midi input, ignoires passthrough
       class Input : public Interface::Input
       {
       public:
@@ -24,14 +24,14 @@ namespace Midi
          RtMidiIn input;
 
       private:
-         void openInput(bool verbose);
          static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
          static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
 
       private:
-         const std::string inputPortName; // rt midi does not use QString
+         const QString inputPortName;
+         bool isOpen;
       };
-   } // namespace Device
+   } // namespace Virtual
 } // namespace Midi
 
-#endif // NOT MidiDeviceInputH
+#endif // NOT MidiVirtualInputH
