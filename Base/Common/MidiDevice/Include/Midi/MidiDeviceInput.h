@@ -2,6 +2,7 @@
 #define MidiDeviceInputH
 
 #include <Midi/MidiInterfaceInput.h>
+#include <QObject>
 
 #include "../RtMidi4/RtMidi4.h"
 
@@ -10,10 +11,11 @@ namespace Midi
    namespace Device
    {
       // connect to an existing input
-      class Input : public Interface::Input
+      class Input : public QObject, public Interface::Input
       {
+         Q_OBJECT
       public:
-         Input(const QString& inputPortName);
+         Input(QObject* parent, const QString& inputPortName);
          virtual ~Input();
 
       public:
@@ -25,6 +27,7 @@ namespace Midi
          RtMidiIn input;
 
       private:
+         Q_INVOKABLE void dataFromInput(const Bytes& message) override;
          void openInput();
          static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
          static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);

@@ -2,8 +2,9 @@
 
 #include <QThread>
 
-Midi::Device::Output::Output(const QString& outputPortName)
-   : Interface::Output()
+Midi::Device::Output::Output(QObject* parent, const QString& outputPortName)
+   : QObject(parent)
+   , Interface::Output()
    , output()
    , outputPortName(outputPortName.toStdString())
 {

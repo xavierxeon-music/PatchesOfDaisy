@@ -1,7 +1,8 @@
 #include <Midi/MidiVirtualInput.h>
 
-Midi::Virtual::Input::Input(const QString& inputPortName)
-   : Interface::Input()
+Midi::Virtual::Input::Input(QObject* parent, const QString& inputPortName)
+   : QObject(parent)
+   , Interface::Input()
    , input()
    , inputPortName(inputPortName)
    , isOpen(false)

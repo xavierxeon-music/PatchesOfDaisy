@@ -1,7 +1,8 @@
 #include <Midi/MidiVirtualOutput.h>
 
-Midi::Virtual::Output::Output(const QString& outputPortName)
-   : Interface::Output()
+Midi::Virtual::Output::Output(QObject* parent, const QString& outputPortName)
+   : QObject(parent)
+   , Interface::Output()
    , output()
    , outputPortName(outputPortName)
    , isOpen(false)

@@ -2,8 +2,9 @@
 
 #include <Midi/MidiInterfaceOutput.h>
 
-Midi::Device::Input::Input(const QString& inputPortName)
-   : Interface::Input()
+Midi::Device::Input::Input(QObject* parent, const QString& inputPortName)
+   : QObject(parent)
+   , Interface::Input()
    , input()
    , inputPortName(inputPortName.toStdString())
 {
@@ -40,6 +41,14 @@ QStringList Midi::Device::Input::getAvailable()
    }
 
    return deviceList;
+}
+
+void Midi::Device::Input::dataFromInput(const Bytes& message)
+{
+   for (Interface::Output* passthrough : passthroughList)
+      passthrough->sendBuffer(message);
+
+   Interface::Input::dataFromInput(message);
 }
 
 void Midi::Device::Input::openInput()
@@ -91,16 +100,18 @@ void Midi::Device::Input::midiReceive(double timeStamp, std::vector<unsigned cha
    if (!me)
       return;
 
+   static int once = qRegisterMetaType<Bytes>("Bytes");
+   Q_UNUSED(once);
+
    static Bytes buffer;
    auto maybeProcessBuffer = [&]()
    {
       if (0 == buffer.size())
          return;
 
-      for (Interface::Output* passthrough : me->passthroughList)
-         passthrough->sendBuffer(buffer);
+      Input::staticMetaObject.invokeMethod(me, "dataFromInput", Qt::QueuedConnection, Q_ARG(Bytes, buffer));
 
-      me->dataFromInput(buffer); // may cause threading issues, since callback is not in main thread
+      //me->dataFromInput(buffer); // may cause threading issues, since callback is not in main thread
 
       buffer.clear();
    };

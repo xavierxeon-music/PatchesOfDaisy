@@ -2,6 +2,7 @@
 #define MidiDeviceOutputH
 
 #include <Midi/MidiInterfaceOutput.h>
+#include <QObject>
 
 #include "../RtMidi4/RtMidi4.h"
 
@@ -10,10 +11,11 @@ namespace Midi
    namespace Device
    {
       // connect to an existing output
-      class Output : public Interface::Output
+      class Output : public QObject, public Interface::Output
       {
+         Q_OBJECT
       public:
-         Output(const QString& outputPortName);
+         Output(QObject* parent, const QString& outputPortName);
          virtual ~Output();
 
       public:
