@@ -19,13 +19,14 @@ namespace Midi
       public:
          void open() override;
          void close() override;
+         static QStringList getAvailable();
 
       protected:
          RtMidiOut output;
 
       private:
          void sendBuffer(const Bytes& buffer) override;
-         void openOutput(bool verbose);
+         void openOutput();
          static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
 
       private:

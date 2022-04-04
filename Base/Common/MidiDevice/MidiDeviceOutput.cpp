@@ -1,5 +1,7 @@
 #include <Midi/MidiDeviceOutput.h>
 
+#include <QThread>
+
 Midi::Device::Output::Output(const QString& outputPortName)
    : Interface::Output()
    , output()
@@ -14,8 +16,7 @@ Midi::Device::Output::~Output()
 
 void Midi::Device::Output::open()
 {
-   bool verbose = false;
-   openOutput(verbose);
+   openOutput();
 }
 
 void Midi::Device::Output::close()
@@ -27,26 +28,35 @@ void Midi::Device::Output::close()
    qInfo() << "closed midi output port";
 }
 
+QStringList Midi::Device::Output::getAvailable()
+{
+   QStringList deviceList;
+
+   RtMidiOut dummy;
+   for (uint index = 0; index < dummy.getPortCount(); index++)
+   {
+      const std::string testPortName = dummy.getPortName(index);
+      deviceList << QString::fromStdString(testPortName);
+   }
+
+   return deviceList;
+}
+
 void Midi::Device::Output::sendBuffer(const Bytes& buffer)
 {
    output.sendMessage(&buffer);
+   QThread::msleep(1);
 }
 
-void Midi::Device::Output::openOutput(bool verbose)
+void Midi::Device::Output::openOutput()
 {
    if (output.isPortOpen())
       return;
-
-   if (verbose)
-      qInfo() << "available outputs:";
 
    uint portNumber = 255;
    for (uint index = 0; index < output.getPortCount(); index++)
    {
       const std::string testPortName = output.getPortName(index);
-      if (verbose)
-         qDebug() << index << QString::fromStdString(testPortName);
-
       if (outputPortName != testPortName)
          continue;
 

@@ -1,7 +1,5 @@
 #include <Midi/MidiToolBridge.h>
 
-#include <QThread>
-
 #include <Tools/SevenBit.h>
 
 Midi::Tool::Bridge::Bridge(Remember::Root* root, Interface::Input* input, Interface::Output* output, const Channel& myChannel, const Channel& remoteChannel)
@@ -30,10 +28,7 @@ void Midi::Tool::Bridge::pushToRemote()
    Bytes message(3);
 
    for (const uint8_t byte : dataBase64)
-   {
       output->sendControllerChange(remoteChannel, ControllerMessage::RememberBlock, byte);
-      QThread::msleep(1);
-   }
 
    output->sendControllerChange(remoteChannel, ControllerMessage::RememberApply, 0);
 }

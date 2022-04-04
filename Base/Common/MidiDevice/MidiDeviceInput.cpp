@@ -16,8 +16,7 @@ Midi::Device::Input::~Input()
 
 void Midi::Device::Input::open()
 {
-   bool verbose = false;
-   openInput(verbose);
+   openInput();
 }
 
 void Midi::Device::Input::close()
@@ -29,21 +28,29 @@ void Midi::Device::Input::close()
    qInfo() << "closed midi input port";
 }
 
-void Midi::Device::Input::openInput(bool verbose)
+QStringList Midi::Device::Input::getAvailable()
+{
+   QStringList deviceList;
+
+   RtMidiIn dummy;
+   for (uint index = 0; index < dummy.getPortCount(); index++)
+   {
+      const std::string testPortName = dummy.getPortName(index);
+      deviceList << QString::fromStdString(testPortName);
+   }
+
+   return deviceList;
+}
+
+void Midi::Device::Input::openInput()
 {
    if (input.isPortOpen())
       return;
-
-   if (verbose)
-      qInfo() << "available inputs:";
 
    uint portNumber = 255;
    for (uint index = 0; index < input.getPortCount(); index++)
    {
       const std::string testPortName = input.getPortName(index);
-      if (verbose)
-         qDebug() << index << QString::fromStdString(testPortName);
-
       if (inputPortName != testPortName)
          continue;
 

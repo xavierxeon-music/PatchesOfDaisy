@@ -2,6 +2,8 @@
 
 #include <cstring>
 
+#include <QThread>
+
 const int Midi::Tunnel::Socket::port = 6666;
 
 Midi::Tunnel::Socket::Socket(QObject* parent)
@@ -63,4 +65,5 @@ void Midi::Tunnel::Socket::sendBuffer(const Bytes& buffer)
    socket->write(data, buffer.size());
 
    socket->flush();
+   QThread::msleep(1);
 }
