@@ -11,7 +11,6 @@ Midi::Tunnel::Socket::Socket(QObject* parent)
    , Interface::Input()
    , Interface::Output()
    , socket()
-   , buffer()
 {
 }
 
@@ -40,19 +39,32 @@ QAbstractSocket::SocketState Midi::Tunnel::Socket::getState() const
 
 void Midi::Tunnel::Socket::slotIncomingData()
 {
-   buffer.append(socket->readAll());
-   while (buffer.length() >= 3)
+   QByteArray buffer = socket->readAll();
+   static const uint8_t mask = 0x80;
+
+   qsizetype startIndex = 0;
+   for (qsizetype index = 0; index < buffer.size(); index++)
    {
-      const QByteArray messageBuffer = buffer.left(3);
-      buffer.remove(0, 3);
+      const uint8_t byte = buffer.at(index);
 
-      Bytes message(3);
-      std::memcpy(&message[0], (uint8_t*)messageBuffer.data(), 3);
+      if (index + 1 == buffer.size())
+         index += 1;
 
-      for (Interface::Output* passthrough : passthroughList)
-         passthrough->sendBuffer(message);
+      const bool messageStart = (mask == (byte & mask));
+      if ((messageStart && index != startIndex) // mew message, but not first entry
+          || (index == buffer.size()))          // end of buffer
+      {
+         const qsizetype length = index - startIndex;
+         Bytes message(length);
+         std::memcpy(&message[0], (uint8_t*)buffer.mid(startIndex, length).data(), length);
 
-      dataFromInput(message);
+         for (Interface::Output* passthrough : passthroughList)
+            passthrough->sendBuffer(message);
+
+         dataFromInput(message);
+
+         startIndex = index;
+      }
    }
 }
 

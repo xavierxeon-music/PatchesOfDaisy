@@ -32,7 +32,6 @@ namespace Midi
 
       private:
          QPointer<QTcpSocket> socket;
-         QByteArray buffer;
       };
    } // namespace Tunnel
 } // namespace Midi
