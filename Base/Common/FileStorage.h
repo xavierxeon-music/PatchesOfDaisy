@@ -9,8 +9,8 @@ public:
    FileStorage(Remember::Root* root);
 
 public:
-   void loadFromFile(const QString& fileName);
-   void saveToFile(const QString& fileName);
+   bool loadFromFile(const QString& fileName);
+   bool saveToFile(const QString& fileName);
 
 private:
    Remember::Root* root;

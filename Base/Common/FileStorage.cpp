@@ -9,14 +9,14 @@ FileStorage::FileStorage(Remember::Root* root)
 {
 }
 
-void FileStorage::loadFromFile(const QString& fileName)
+bool FileStorage::loadFromFile(const QString& fileName)
 {
    if (!root)
-      return;
+      return false;
 
    QFile file(fileName);
    if (!file.open(QIODevice::ReadOnly))
-      return;
+      return false;
 
    const QByteArray content = file.readAll();
    file.close();
@@ -26,22 +26,26 @@ void FileStorage::loadFromFile(const QString& fileName)
    Remember::DataVector data(dataSize);
    std::memcpy(&data[0], content.constData(), dataSize);
    root->set(data);
+
+   return true;
 }
 
-void FileStorage::saveToFile(const QString& fileName)
+bool FileStorage::saveToFile(const QString& fileName)
 {
    if (!root)
-      return;
+      return false;
 
    Remember::DataVector data = root->get();
    const uint64_t dataSize = data.size();
 
    QFile file(fileName);
-   if (file.open(QIODevice::WriteOnly))
-   {
-      file.write((const char*)(&data[0]), dataSize);
-      file.close();
-   }
+   if (!file.open(QIODevice::WriteOnly))
+      return false;
 
+   file.write((const char*)(&data[0]), dataSize);
+   file.close();
    root->setSynced();
+
+   return true;
+
 }

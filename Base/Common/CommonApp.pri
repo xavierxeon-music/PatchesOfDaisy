@@ -17,6 +17,8 @@ SOURCES += \
 CONFIG(midi):include($$PWD/MidiDevice/MidiDevice.pri)
 CONFIG(audio):include($$PWD/AudioDevice/AudioDevice.pri)
 
+CONFIG += c++17
+
 INCLUDEPATH += $$PWD
 
 
