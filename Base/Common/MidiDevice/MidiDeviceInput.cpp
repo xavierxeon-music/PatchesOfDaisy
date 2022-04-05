@@ -1,5 +1,7 @@
 #include <Midi/MidiDeviceInput.h>
 
+#include <QDebug>
+
 Midi::Device::Input::Input(QObject* parent, const QString& portName)
    : RtMidi::Input(parent, portName)
 {

@@ -3,7 +3,8 @@
 
 #include <QObject>
 
-#include <RtMidi4.h>
+#include <Midi/MidiVirtualInput.h>
+#include <Midi/MidiVirtualOutput.h>
 
 #include <ImposterMidiEvent.h>
 
@@ -24,13 +25,13 @@ namespace Imposter
       void SendMessage(uint8_t* bytes, size_t size);
 
    private:
-      Q_INVOKABLE void dataReceived(const Bytes& message);
-      static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
-      static void midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData);
+      void noteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity);
+      void noteOff(const Midi::Channel& channel, const Note& note);
+      void controllChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value);
 
    private:
-      RtMidiOut output;
-      RtMidiIn input;
+      Midi::Virtual::Input input;
+      Midi::Virtual::Output output;
       QList<Imposter::MidiEvent> eventList;
    };
 } // namespace Imposter

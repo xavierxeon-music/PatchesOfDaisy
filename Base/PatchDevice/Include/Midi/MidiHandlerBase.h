@@ -1,7 +1,8 @@
 #ifndef MidiHandlerBaseH
 #define MidiHandlerBaseH
 
-#include <Midi/MidiInterface.h>
+#include <Midi/MidiInterfaceInput.h>
+#include <Midi/MidiInterfaceOutput.h>
 
 #ifndef NON_DAISY_DEVICE
 #include <daisy_patch.h>
@@ -15,9 +16,8 @@ namespace Midi
 {
    namespace Handler
    {
-      class Base : public Interface
+      class Base : public Interface::Input, public Interface::Output
       {
-
       public:
          inline Base(const Channel& receiveChannel, Base* passThroughHandler);
 

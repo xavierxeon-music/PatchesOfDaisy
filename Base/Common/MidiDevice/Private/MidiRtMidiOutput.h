@@ -21,6 +21,7 @@ namespace Midi
          virtual void open() override = 0;
          virtual void close() override = 0;
          static QStringList getAvailable();
+         void sendBuffer(const Bytes& buffer) override;
 
       protected:
          static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
@@ -28,9 +29,6 @@ namespace Midi
       protected:
          RtMidiOut output;
          const QString portName;
-
-      private:
-         void sendBuffer(const Bytes& buffer) override;
       };
    } // namespace RtMidi
 } // namespace Midi

@@ -15,7 +15,7 @@ namespace Midi
          inline Internal(DaisyPatch* daisy, Base* passThroughHandler, const Channel& receiveChannel = 8);
 
       public:
-         inline void initMidi(bool verbose = false) override;
+         inline void initMidi();
          inline void pollMidiReceive() override final;
 
       private:

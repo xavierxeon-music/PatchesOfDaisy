@@ -1,5 +1,7 @@
 #include <Midi/MidiVirtualInput.h>
 
+#include <QDebug>
+
 Midi::Virtual::Input::Input(QObject* parent, const QString& portName)
    : RtMidi::Input(parent, portName)
    , isOpen(false)

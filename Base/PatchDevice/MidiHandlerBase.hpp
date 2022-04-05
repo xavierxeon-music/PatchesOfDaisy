@@ -32,7 +32,9 @@ static const auto ControlChangeType = Imposter::ControlChange;
 #endif // NON_DAISY_DEVICE
 
 Midi::Handler::Base::Base(const Channel& receiveChannel, Base* passThroughHandler)
-   : receiveChannel(receiveChannel)
+   : Interface::Input()
+   , Interface::Output()
+   , receiveChannel(receiveChannel)
    , passThroughHandler(passThroughHandler)
 {
 }
