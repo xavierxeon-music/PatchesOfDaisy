@@ -21,6 +21,7 @@ CPP_SOURCES += \
 	$(BASE_DIR)/Common/MusicTools/AbstractOscilator.cpp \
 	$(BASE_DIR)/Common/MusicTools/Maths.cpp \
 	$(BASE_DIR)/Common/MusicTools/Note.cpp  \
+	$(BASE_DIR)/Common/Remember/RememberInterface.cpp \
 	$(BASE_DIR)/Common/Remember/RememberRoot.cpp  
 
 ifeq ($(USE_BASE_SD_STORAGE),1)
