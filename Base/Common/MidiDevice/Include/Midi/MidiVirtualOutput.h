@@ -1,36 +1,25 @@
 #ifndef MidiVirtualOutputH
 #define MidiVirtualOutputH
 
-#include <Midi/MidiInterfaceOutput.h>
-#include <QObject>
-
-#include "../RtMidi4/RtMidi4.h"
+#include "../../Private/MidiRtMidiOutput.h"
 
 namespace Midi
 {
    namespace Virtual
    {
       // creates a virtual midi output
-      class Output : public QObject, public Interface::Output
+      class Output : public RtMidi::Output
       {
          Q_OBJECT
       public:
-         Output(QObject* parent, const QString& outputPortName);
+         Output(QObject* parent, const QString& portName);
          virtual ~Output();
 
       public:
          void open() override;
          void close() override;
 
-      protected:
-         RtMidiOut output;
-
       private:
-         void sendBuffer(const Bytes& buffer) override;
-         static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
-
-      private:
-         const QString outputPortName;
          bool isOpen;
       };
    } // namespace Virtual

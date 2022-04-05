@@ -1,7 +1,7 @@
 #ifndef AudioDeviceInputsTempoH
 #define AudioDeviceInputsTempoH
 
-#include <Music/TriggerdTempo.h>
+#include <Music/Tempo.h>
 
 #include <functional>
 
@@ -9,7 +9,7 @@
 
 namespace AudioDevice
 {
-   class InputsTempo : public TriggerdTempo
+   class InputsTempo : public Tempo
    {
    public:
       using ClockFunction = std::function<void()>;
@@ -18,7 +18,7 @@ namespace AudioDevice
       InputsTempo(Driver* driver, const Channel& channelClock, const Channel& channelReset);
 
    public:
-      void advance(const float audioCallackRate) override;
+      void advance(const float callackRate) override;
 
       template <typename ClassType>
       void onClockTick(ClassType* instance, void (ClassType::*functionPointer)());

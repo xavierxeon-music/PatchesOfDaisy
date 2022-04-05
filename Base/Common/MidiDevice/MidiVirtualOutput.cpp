@@ -1,11 +1,7 @@
 #include <Midi/MidiVirtualOutput.h>
 
-Midi::Virtual::Output::Output(QObject* parent, const QString& outputPortName)
-   : QObject(parent)
-   , Interface::Output()
-   , output()
-   , outputPortName(outputPortName)
-   , isOpen(false)
+Midi::Virtual::Output::Output(QObject* parent, const QString& portName)
+   : RtMidi::Output(parent, portName)
 {
 }
 
@@ -19,10 +15,10 @@ void Midi::Virtual::Output::open()
    if (isOpen)
       return;
 
-   output.openVirtualPort(outputPortName.toStdString());
+   output.openVirtualPort(portName.toStdString());
    output.setErrorCallback(&Virtual::Output::midiError);
 
-   qInfo() << "opened virtual midi output " << outputPortName;
+   qInfo() << "opened virtual midi output " << portName;
    isOpen = true;
 }
 
@@ -32,19 +28,8 @@ void Midi::Virtual::Output::close()
       return;
 
    output.closePort();
-   qInfo() << "closed virtual midi output" << outputPortName;
+   qInfo() << "closed virtual midi output" << portName;
 
    isOpen = false;
 }
 
-void Midi::Virtual::Output::sendBuffer(const Bytes& buffer)
-{
-   output.sendMessage(&buffer);
-}
-
-void Midi::Virtual::Output::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
-{
-   Q_UNUSED(userData)
-
-   qInfo() << "output" << type << QString::fromStdString(errorText);
-}

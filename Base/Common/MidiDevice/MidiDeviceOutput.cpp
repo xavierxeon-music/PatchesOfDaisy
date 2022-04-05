@@ -1,12 +1,7 @@
 #include <Midi/MidiDeviceOutput.h>
 
-#include <QThread>
-
-Midi::Device::Output::Output(QObject* parent, const QString& outputPortName)
-   : QObject(parent)
-   , Interface::Output()
-   , output()
-   , outputPortName(outputPortName.toStdString())
+Midi::Device::Output::Output(QObject* parent, const QString& portName)
+   : RtMidi::Output(parent, portName)
 {
 }
 
@@ -17,48 +12,14 @@ Midi::Device::Output::~Output()
 
 void Midi::Device::Output::open()
 {
-   openOutput();
-}
-
-void Midi::Device::Output::close()
-{
-   if (!output.isPortOpen())
-      return;
-
-   output.closePort();
-   qInfo() << "closed midi output port";
-}
-
-QStringList Midi::Device::Output::getAvailable()
-{
-   QStringList deviceList;
-
-   RtMidiOut dummy;
-   for (uint index = 0; index < dummy.getPortCount(); index++)
-   {
-      const std::string testPortName = dummy.getPortName(index);
-      deviceList << QString::fromStdString(testPortName);
-   }
-
-   return deviceList;
-}
-
-void Midi::Device::Output::sendBuffer(const Bytes& buffer)
-{
-   output.sendMessage(&buffer);
-   QThread::msleep(1);
-}
-
-void Midi::Device::Output::openOutput()
-{
    if (output.isPortOpen())
       return;
 
    uint portNumber = 255;
    for (uint index = 0; index < output.getPortCount(); index++)
    {
-      const std::string testPortName = output.getPortName(index);
-      if (outputPortName != testPortName)
+      const QString testPortName = QString::fromStdString(output.getPortName(index));
+      if (portName != testPortName)
          continue;
 
       portNumber = index;
@@ -78,9 +39,11 @@ void Midi::Device::Output::openOutput()
    }
 }
 
-void Midi::Device::Output::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
+void Midi::Device::Output::close()
 {
-   Q_UNUSED(userData)
+   if (!output.isPortOpen())
+      return;
 
-   qInfo() << "output" << type << QString::fromStdString(errorText);
+   output.closePort();
+   qInfo() << "closed midi output port";
 }
