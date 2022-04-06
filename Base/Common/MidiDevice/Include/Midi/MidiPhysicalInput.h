@@ -1,11 +1,11 @@
-#ifndef MidiDeviceInputH
-#define MidiDeviceInputH
+#ifndef MidiPhysicalInputH
+#define MidiPhysicalInputH
 
 #include "../../Private/MidiRtMidiInput.h"
 
 namespace Midi
 {
-   namespace Device
+   namespace Physical
    {
       // connect to an existing input
       class Input : public RtMidi::Input
@@ -19,7 +19,7 @@ namespace Midi
          void open() override;
          void close() override;
       };
-   } // namespace Device
+   } // namespace Physical
 } // namespace Midi
 
-#endif // NOT MidiDeviceInputH
+#endif // NOT MidiPhysicalInputH

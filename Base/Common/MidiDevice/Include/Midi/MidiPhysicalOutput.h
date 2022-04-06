@@ -1,11 +1,11 @@
-#ifndef MidiDeviceOutputH
-#define MidiDeviceOutputH
+#ifndef MidiPhysicalOutputH
+#define MidiPhysicalOutputH
 
 #include "../../Private/MidiRtMidiOutput.h"
 
 namespace Midi
 {
-   namespace Device
+   namespace Physical
    {
       // connect to an existing output
       class Output : public RtMidi::Output
@@ -19,7 +19,7 @@ namespace Midi
          void open() override;
          void close() override;
       };
-   } // namespace Device
+   } // namespace Physical
 } // namespace Midi
 
-#endif // NOT MidiDeviceOutputH
+#endif // NOT MidiPhysicalOutputH

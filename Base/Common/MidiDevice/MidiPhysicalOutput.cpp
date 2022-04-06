@@ -1,18 +1,18 @@
-#include <Midi/MidiDeviceOutput.h>
+#include <Midi/MidiPhysicalOutput.h>
 
 #include <QDebug>
 
-Midi::Device::Output::Output(QObject* parent, const QString& portName)
+Midi::Physical::Output::Output(QObject* parent, const QString& portName)
    : RtMidi::Output(parent, portName)
 {
 }
 
-Midi::Device::Output::~Output()
+Midi::Physical::Output::~Output()
 {
-   Device::Output::close();
+   Physical::Output::close();
 }
 
-void Midi::Device::Output::open()
+void Midi::Physical::Output::open()
 {
    if (output.isPortOpen())
       return;
@@ -31,7 +31,7 @@ void Midi::Device::Output::open()
    if (255 != portNumber)
    {
       output.openPort(portNumber);
-      output.setErrorCallback(&Device::Output::midiError);
+      output.setErrorCallback(&Physical::Output::midiError);
 
       qInfo() << "opened midi output port" << portNumber;
    }
@@ -41,7 +41,7 @@ void Midi::Device::Output::open()
    }
 }
 
-void Midi::Device::Output::close()
+void Midi::Physical::Output::close()
 {
    if (!output.isPortOpen())
       return;

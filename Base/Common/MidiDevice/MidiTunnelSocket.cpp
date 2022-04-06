@@ -46,7 +46,7 @@ void Midi::Tunnel::Socket::slotIncomingData()
    buffer.append(socket->readAll());
    while (buffer.size() > 0)
    {
-      const uint8_t messageSize = static_cast<const uint8_t>(buffer.at(0));
+      const uint8_t messageSize = static_cast<uint8_t>(buffer.at(0));
       if (buffer.size() < messageSize + 1)
          break;
 

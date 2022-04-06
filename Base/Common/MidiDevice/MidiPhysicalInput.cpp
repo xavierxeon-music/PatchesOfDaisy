@@ -1,18 +1,18 @@
-#include <Midi/MidiDeviceInput.h>
+#include <Midi/MidiPhysicalInput.h>
 
 #include <QDebug>
 
-Midi::Device::Input::Input(QObject* parent, const QString& portName)
+Midi::Physical::Input::Input(QObject* parent, const QString& portName)
    : RtMidi::Input(parent, portName)
 {
 }
 
-Midi::Device::Input::~Input()
+Midi::Physical::Input::~Input()
 {
-   Device::Input::close();
+   Physical::Input::close();
 }
 
-void Midi::Device::Input::open()
+void Midi::Physical::Input::open()
 {
    if (input.isPortOpen())
       return;
@@ -43,7 +43,7 @@ void Midi::Device::Input::open()
    }
 }
 
-void Midi::Device::Input::close()
+void Midi::Physical::Input::close()
 {
    if (!input.isPortOpen())
       return;
