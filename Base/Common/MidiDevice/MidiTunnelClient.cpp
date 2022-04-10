@@ -8,7 +8,7 @@ Midi::Tunnel::Client::Client(QObject* parent, const QString& serverName)
 {
    QTimer* reconnectTimer = new QTimer(this);
    connect(reconnectTimer, &QTimer::timeout, this, &Client::slotTryToConnectToHost);
-   reconnectTimer->start(1000);
+   reconnectTimer->start(10 * 1000);
 }
 
 void Midi::Tunnel::Client::slotTryToConnectToHost()
@@ -21,7 +21,7 @@ void Midi::Tunnel::Client::slotTryToConnectToHost()
       newSocket = new QTcpSocket(this);
 
    newSocket->connectToHost(serverName, port);
-   if (newSocket->waitForConnected())
+   if (newSocket->waitForConnected(1000))
    {
       setSocket(newSocket);
       newSocket = nullptr;
