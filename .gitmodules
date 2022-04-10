@@ -34,3 +34,6 @@
 [submodule "Projects/Project_TimeLord"]
 	path = Projects/TimeLord
 	url = https://github.com/xavierxeon-music/Project_TimeLord.git
+[submodule "Projects/Project_Harmonizer"]
+	path = Projects/Harmonizer
+	url = https://github.com/xavierxeon-music/Project_Harmonizer.git
