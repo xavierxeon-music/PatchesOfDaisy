@@ -5,14 +5,39 @@
 
 // port name
 
+Midi::RtMidi::PortName::Map Midi::RtMidi::PortName::nameMap = generate();
+
 QString Midi::RtMidi::PortName::makeNice(const QString& rawPortName)
 {
-   return "HELLO_" + rawPortName;
+   for (Map::const_iterator it = nameMap.constBegin(); it != nameMap.constEnd(); it++)
+   {
+      if (rawPortName == it.value())
+         return it.key();
+   }
+   return rawPortName;
 }
 
-QString Midi::RtMidi::PortName::makeRaw(const QString& sequencerName)
+QString Midi::RtMidi::PortName::makeRaw(const QString& nicePortName)
 {
-   return sequencerName.mid(6);
+   if (nameMap.contains(nicePortName))
+      return nameMap.value(nicePortName);
+
+   return nicePortName;
+}
+
+Midi::RtMidi::PortName::Map Midi::RtMidi::PortName::generate()
+{
+#if defined(__UNIX_JACK__)
+   QProcess jackList;
+   jackList.start("jack_lsp", {"--aliases", "--type", "midi"});
+   if (!jackList.waitForFinished())
+      return Map();
+
+   qDebug() << jackList.readAllStandardOutput();
+   return Map();
+#else
+   return Map();
+#endif
 }
 
 // base

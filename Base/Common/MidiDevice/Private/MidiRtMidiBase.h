@@ -9,13 +9,24 @@ namespace Midi
 {
    namespace RtMidi
    {
-      struct PortName
+      class PortName
       {
+      public:
          using Raw = QString;
          using Nice = QString;
 
+      public:
          static Nice makeNice(const Raw& rawPortName);
          static Raw makeRaw(const Nice& nicePortName);
+
+      private:
+         using Map = QMap<Nice, Raw>;
+
+      private:
+         static Map generate();
+
+      private:
+         static Map nameMap;
       };
 
       class Base : public QObject
