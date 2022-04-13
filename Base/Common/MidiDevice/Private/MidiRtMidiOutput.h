@@ -1,16 +1,14 @@
 #ifndef MidiRtMidiOutputH
 #define MidiRtMidiOutputH
 
+#include "MidiRtMidiBase.h"
 #include <Midi/MidiInterfaceOutput.h>
-#include <QObject>
-
-#include "RtMidi4.h"
 
 namespace Midi
 {
    namespace RtMidi
    {
-      class Output : public QObject, public Interface::Output
+      class Output : public Base, public Interface::Output
       {
          Q_OBJECT
       public:
@@ -22,9 +20,6 @@ namespace Midi
          virtual void close() override = 0;
          static QStringList getAvailable();
          void sendBuffer(const Bytes& buffer) override;
-
-      protected:
-         static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
 
       protected:
          RtMidiOut output;

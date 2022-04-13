@@ -5,10 +5,10 @@
 #include <Midi/MidiInterfaceOutput.h>
 
 Midi::RtMidi::Input::Input(QObject* parent, const QString& portName)
-   : QObject(parent)
+   : Base(parent)
    , Interface::Input()
    , input()
-   , portName(portName)
+   , portName(PortName::makeRaw(portName))
 {
 }
 
@@ -24,17 +24,12 @@ QStringList Midi::RtMidi::Input::getAvailable()
    for (uint index = 0; index < dummy.getPortCount(); index++)
    {
       const std::string testPortName = dummy.getPortName(index);
-      deviceList << QString::fromStdString(testPortName);
+      const QString rawPortName = QString::fromStdString(testPortName);
+      const QString sequencerPortName = PortName::makeNice(rawPortName);
+      deviceList << sequencerPortName;
    }
 
    return deviceList;
-}
-
-void Midi::RtMidi::Input::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
-{
-   Q_UNUSED(userData)
-
-   qInfo() << "input" << type << QString::fromStdString(errorText);
 }
 
 void Midi::RtMidi::Input::midiReceive(double timeStamp, std::vector<unsigned char>* message, void* userData)

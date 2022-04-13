@@ -4,7 +4,7 @@
 #include <QThread>
 
 Midi::RtMidi::Output::Output(QObject* parent, const QString& portName)
-   : QObject(parent)
+   : Base(parent)
    , Interface::Output()
    , output()
    , portName(portName)
@@ -34,11 +34,4 @@ void Midi::RtMidi::Output::sendBuffer(const Bytes& buffer)
 {
    output.sendMessage(&buffer);
    QThread::msleep(1);
-}
-
-void Midi::RtMidi::Output::midiError(RtMidiError::Type type, const std::string& errorText, void* userData)
-{
-   Q_UNUSED(userData)
-
-   qInfo() << "output" << type << QString::fromStdString(errorText);
 }
