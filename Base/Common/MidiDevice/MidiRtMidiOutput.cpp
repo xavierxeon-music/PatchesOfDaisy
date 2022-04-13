@@ -4,10 +4,9 @@
 #include <QThread>
 
 Midi::RtMidi::Output::Output(QObject* parent, const QString& portName)
-   : Base(parent)
+   : Base(parent, portName)
    , Interface::Output()
    , output()
-   , portName(portName)
 {
 }
 
@@ -23,7 +22,9 @@ QStringList Midi::RtMidi::Output::getAvailable()
    for (uint index = 0; index < dummy.getPortCount(); index++)
    {
       const std::string testPortName = dummy.getPortName(index);
-      deviceList << QString::fromStdString(testPortName);
+      const QString rawPortName = QString::fromStdString(testPortName);
+      const QString sequencerPortName = PortName::makeNice(rawPortName);
+      deviceList << sequencerPortName;
    }
 
    return deviceList;

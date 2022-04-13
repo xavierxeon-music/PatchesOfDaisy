@@ -20,7 +20,7 @@ namespace Midi
          static Raw makeRaw(const Nice& nicePortName);
 
       private:
-         using Map = QMap<Nice, Raw>;
+         using Map = QMap<Raw, Nice>;
 
       private:
          static Map generate();
@@ -33,10 +33,13 @@ namespace Midi
       {
          Q_OBJECT
       public:
-         Base(QObject* parent);
+         Base(QObject* parent, const QString& portName);
 
       protected:
          static void midiError(RtMidiError::Type type, const std::string& errorText, void* userData);
+
+      protected:
+         const QString portName;
       };
    } // namespace RtMidi
 } // namespace Midi

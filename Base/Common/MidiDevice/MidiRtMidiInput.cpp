@@ -5,10 +5,9 @@
 #include <Midi/MidiInterfaceOutput.h>
 
 Midi::RtMidi::Input::Input(QObject* parent, const QString& portName)
-   : Base(parent)
+   : Base(parent, portName)
    , Interface::Input()
    , input()
-   , portName(PortName::makeRaw(portName))
 {
 }
 

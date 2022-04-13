@@ -25,7 +25,6 @@ namespace Midi
 
       protected:
          RtMidiIn input;
-         const QString portName;
 
       private:
          Q_INVOKABLE void dataFromInput(const Bytes& message) override;

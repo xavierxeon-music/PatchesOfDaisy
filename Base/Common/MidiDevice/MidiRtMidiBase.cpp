@@ -9,18 +9,19 @@ Midi::RtMidi::PortName::Map Midi::RtMidi::PortName::nameMap = generate();
 
 QString Midi::RtMidi::PortName::makeNice(const QString& rawPortName)
 {
-   for (Map::const_iterator it = nameMap.constBegin(); it != nameMap.constEnd(); it++)
-   {
-      if (rawPortName == it.value())
-         return it.key();
-   }
+    if (nameMap.contains(rawPortName))
+      return nameMap.value(rawPortName);
+
    return rawPortName;
 }
 
 QString Midi::RtMidi::PortName::makeRaw(const QString& nicePortName)
 {
-   if (nameMap.contains(nicePortName))
-      return nameMap.value(nicePortName);
+   for (Map::const_iterator it = nameMap.constBegin(); it != nameMap.constEnd(); it++)
+   {
+      if (nicePortName == it.value())
+         return it.key();
+   }
 
    return nicePortName;
 }
@@ -33,8 +34,30 @@ Midi::RtMidi::PortName::Map Midi::RtMidi::PortName::generate()
    if (!jackList.waitForFinished())
       return Map();
 
-   qDebug() << jackList.readAllStandardOutput();
-   return Map();
+   const QString data = QString::fromUtf8(jackList.readAllStandardOutput());
+   const QStringList lines = data.split('\n', Qt::SkipEmptyParts);
+
+   Map map;
+   QString systemName;
+   for(QString line: qAsConst(lines))
+   {
+      line = line.trimmed();
+      if(line.startsWith("system:"))
+      {
+         systemName = line;
+         continue;
+      }
+      else if(line.startsWith("alsa_pcm:"))
+      {
+         QString name = line;
+         name.remove("alsa_pcm:");
+         name.replace("/midi", "");
+
+         map[systemName] = name;
+         continue;
+      }
+   }
+   return map;
 #else
    return Map();
 #endif
@@ -42,8 +65,9 @@ Midi::RtMidi::PortName::Map Midi::RtMidi::PortName::generate()
 
 // base
 
-Midi::RtMidi::Base::Base(QObject* parent)
+Midi::RtMidi::Base::Base(QObject* parent, const QString &portName)
    : QObject(parent)
+   , portName(PortName::makeRaw(portName))
 {
 }
 

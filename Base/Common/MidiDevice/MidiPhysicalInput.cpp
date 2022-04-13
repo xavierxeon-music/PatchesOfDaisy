@@ -39,7 +39,7 @@ void Midi::Physical::Input::open()
    }
    else
    {
-      qWarning() << "unable to open midi input";
+      qWarning() << "unable to open midi input" << portName;
    }
 }
 

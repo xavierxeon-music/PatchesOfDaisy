@@ -37,7 +37,7 @@ void Midi::Physical::Output::open()
    }
    else
    {
-      qWarning() << "unable to open midi output";
+      qWarning() << "unable to open midi output" << portName;
    }
 }
 

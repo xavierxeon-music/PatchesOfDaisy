@@ -23,7 +23,6 @@ namespace Midi
 
       protected:
          RtMidiOut output;
-         const QString portName;
       };
    } // namespace RtMidi
 } // namespace Midi
