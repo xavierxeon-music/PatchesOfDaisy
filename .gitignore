@@ -5,5 +5,6 @@
 **/*.pro.user
 **/.qt_for_python
 **/*.app
+**/imposter-egg*
 Tools/device_firmwares/
 
