@@ -25,8 +25,6 @@ void Midi::Tool::Bridge::pushToRemote()
    Remember::DataVector data = root->get();
    Bytes dataBase64 = SevenBit::encode(data);
 
-   Bytes message(3);
-
    for (const uint8_t byte : dataBase64)
       output->sendControllerChange(remoteChannel, ControllerMessage::RememberBlock, byte);
 
