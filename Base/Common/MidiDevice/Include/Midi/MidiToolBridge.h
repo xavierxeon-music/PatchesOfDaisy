@@ -18,7 +18,7 @@ namespace Midi
          using PulledFromRemoteFunction = std::function<void()>;
 
       public:
-         Bridge(Remember::Root* root, Interface::Input* input, Interface::Output* output, const Channel& myChannel = Device::MacBook, const Channel& remoteChannel = Device::Daisy);
+         Bridge(Remember::Root* root, Interface::Input* input, Interface::Output* output, const Channel& myChannel = Device::VCVRack, const Channel& remoteChannel = Device::Daisy);
 
       public:
          template <typename ClassType>
