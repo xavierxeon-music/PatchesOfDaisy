@@ -49,3 +49,8 @@ void Midi::Physical::Output::close()
    output.closePort();
    qInfo() << "closed midi output port";
 }
+
+bool Midi::Physical::Output::isOpen() const
+{
+   return output.isPortOpen();
+}

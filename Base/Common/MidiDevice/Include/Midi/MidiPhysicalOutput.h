@@ -18,6 +18,7 @@ namespace Midi
       public:
          void open() override;
          void close() override;
+         bool isOpen() const;
       };
    } // namespace Physical
 } // namespace Midi
