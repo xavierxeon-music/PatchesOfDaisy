@@ -29,7 +29,7 @@ namespace AudioChannel
       void setRemote(const Note& newNote, const Standard::Waveform::Shape& newWaveform);
 
    private:
-      void updateOscilator(bool init);
+      void updateOscilator();
       using Abstract::setup; // make base class function private
 
    private:
@@ -37,6 +37,7 @@ namespace AudioChannel
       QLabel* oscilatorLabel;
       Note note;
       Standard::Waveform::Shape waveform;
+      Standard::Table table;
       WaveTable::Oscilator oscilator;
    };
 } // namespace AudioChannel

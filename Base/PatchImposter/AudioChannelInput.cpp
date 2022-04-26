@@ -8,6 +8,7 @@ AudioChannel::Input::Input()
    , oscilatorLabel(nullptr)
    , note(Note::zeroNote)
    , waveform(Standard::Waveform::Sine)
+   , table()
    , oscilator()
 {
    oscilator.setAmplitude(1.0);
@@ -16,7 +17,8 @@ AudioChannel::Input::Input()
 void AudioChannel::Input::init(Imposter::DaisyPatch* imposterPatch)
 {
    this->imposterPatch = imposterPatch;
-   updateOscilator(true);
+   oscilator.init(&table, imposterPatch->AudioSampleRate());
+   updateOscilator();
 }
 
 std::vector<float> AudioChannel::Input::process(const uint64_t& blockSize)
@@ -34,7 +36,7 @@ void AudioChannel::Input::setup(QLabel* oscilatorLabel, QPixmap* pixmap)
    Abstract::setup(pixmap);
    this->oscilatorLabel = oscilatorLabel;
 
-   updateOscilator(false);
+   updateOscilator();
 }
 
 void AudioChannel::Input::setRemote(const Note& newNote, const Standard::Waveform::Shape& newWaveform)
@@ -42,26 +44,24 @@ void AudioChannel::Input::setRemote(const Note& newNote, const Standard::Wavefor
    if (waveform != newWaveform)
    {
       waveform = newWaveform;
-      updateOscilator(true);
+      updateOscilator();
    }
 
    if (note.frequency != newNote.frequency)
    {
       note = newNote;
-      updateOscilator(false);
+      updateOscilator();
    }
 }
 
-void AudioChannel::Input::updateOscilator(bool init)
+void AudioChannel::Input::updateOscilator()
 {
-   if (init)
-      oscilator.init(Standard::getTable(waveform), imposterPatch->AudioSampleRate());
-
+   table.setWaveform(waveform);
    oscilator.setFrequency(note.frequency);
 
    if (oscilatorLabel)
    {
-      const std::string text = note.name + " [" + Standard::getName(waveform) + "]";
+      const std::string text = note.name + " [" + Standard::Waveform::getName(waveform) + "]";
       oscilatorLabel->setText(QString::fromStdString(text));
    }
 }
