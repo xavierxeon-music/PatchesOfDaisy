@@ -8,7 +8,7 @@
 
 #include <Music/Note.h>
 #include <Sound/StandardTable.h>
-#include <Sound/TableOscilator.h>
+#include <Sound/WaveTable.h>
 
 namespace Imposter
 {
@@ -37,7 +37,7 @@ namespace AudioChannel
       QLabel* oscilatorLabel;
       Note note;
       Standard::Waveform::Shape waveform;
-      TableOscilator oscilator;
+      WaveTable::Oscilator oscilator;
    };
 } // namespace AudioChannel
 
