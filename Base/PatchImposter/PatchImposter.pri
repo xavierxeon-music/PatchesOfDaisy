@@ -20,8 +20,6 @@ defineTest(AddPythonFile) {
    export(PythonScripts.files)
 }
 
-
-
 # source code
 INCLUDEPATH += \
     $$PWD
