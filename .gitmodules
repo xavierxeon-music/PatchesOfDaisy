@@ -37,3 +37,6 @@
 [submodule "Projects/Project_Harmonizer"]
 	path = Projects/Harmonizer
 	url = https://github.com/xavierxeon-music/Project_Harmonizer.git
+[submodule "Projects/Project_Mesh"]
+	path = Projects/Mesh
+	url = https://github.com/xavierxeon-music/Project_Mesh.git
