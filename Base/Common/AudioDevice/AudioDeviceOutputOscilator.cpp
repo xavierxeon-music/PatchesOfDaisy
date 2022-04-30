@@ -4,7 +4,8 @@
 
 AudioDevice::OutputOscilator::OutputOscilator()
    : OutputRaw()
-   , TableOscilator()
+   , WaveTable::Oscilator()
+   , standardTable()
 {
 }
 
@@ -12,7 +13,8 @@ AudioDevice::OutputOscilator::OutputOscilator(Driver* driver, const Channel& cha
    : OutputOscilator()
 {
    activate(driver, channel);
-   init(Standard::getTable(waveform), driver->getSampleRate());
+   standardTable.setWaveform(waveform);
+   init(&standardTable, driver->getSampleRate());
 }
 
 void AudioDevice::OutputOscilator::process(OutputBuffer& outputBuffer)

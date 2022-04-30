@@ -2,13 +2,13 @@
 #define AudioDeviceOutputOscilatorH
 
 #include "AudioDeviceOutputRaw.h"
-#include <Sound/TableOscilator.h>
+#include <Sound/WaveTable.h>
 
 #include <Sound/StandardTable.h>
 
 namespace AudioDevice
 {
-   class OutputOscilator : public OutputRaw, public TableOscilator
+   class OutputOscilator : public OutputRaw, public WaveTable::Oscilator
    {
    public:
       OutputOscilator();
@@ -16,6 +16,9 @@ namespace AudioDevice
 
    private:
       void process(OutputBuffer& outputBuffer) override;
+
+   private:
+      Standard::Table standardTable;
    };
 } // namespace AudioDevice
 
