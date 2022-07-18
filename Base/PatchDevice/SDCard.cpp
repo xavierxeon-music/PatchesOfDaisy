@@ -171,9 +171,9 @@ size_t SDCard::getFileSize()
    fseek(file, 0, SEEK_END);
    const size_t fileSize = ftell(file);
    rewind(file);
-#endif // NON_DAISY_DEVICE
 
    return fileSize;
+#endif // NON_DAISY_DEVICE
 }
 
 void SDCard::jumpToStart()
