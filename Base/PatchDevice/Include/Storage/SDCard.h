@@ -32,6 +32,8 @@ public:
    void load(char* data, size_t size);
    void save(const char* data, size_t size);
    void saveString(const std::string& text);
+   size_t getFileSize();
+   void jumpToStart();
    std::string compileSDStatus() const;
    bool isOpen(bool ignoreErrors = false) const;
 

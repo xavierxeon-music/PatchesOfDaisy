@@ -3,8 +3,8 @@
 #ifndef NON_DAISY_DEVICE
 #include <fatfs.h>
 #else
-#include <QString>
 #include <Settings.h>
+#include <QString>
 #endif // NON_DAISY_DEVICE
 
 SDCard* SDCard::the()
@@ -161,6 +161,28 @@ void SDCard::save(const char* data, size_t size)
 void SDCard::saveString(const std::string& text)
 {
    save(text.c_str(), text.size() * sizeof(const char));
+}
+
+size_t SDCard::getFileSize()
+{
+#ifndef NON_DAISY_DEVICE
+   return f_size(&SDFile);
+#else
+   fseek(file, 0, SEEK_END);
+   const size_t fileSize = ftell(file);
+   rewind(file);
+#endif // NON_DAISY_DEVICE
+
+   return fileSize;
+}
+
+void SDCard::jumpToStart()
+{
+#ifndef NON_DAISY_DEVICE
+   f_rewind(&SDFile);
+#else
+   rewind(file);
+#endif // NON_DAISY_DEVICE
 }
 
 std::string SDCard::compileSDStatus() const
