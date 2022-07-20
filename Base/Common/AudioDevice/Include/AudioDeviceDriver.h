@@ -10,9 +10,10 @@ namespace AudioDevice
 {
    // A sound interface
    // Both Gate and CV poerts (both inputs and outputs) work only with a DC coupled interface!
-   class Driver
+   class Driver final
    {      
    public:
+      using CallbackOverrideFunction = std::function<void(const void* inputBuffer, void* outputBuffer, const Frame& framesPerBuffer)>;
       using AudioLoopFunction = std::function<void(const float& audioCallbackRate)>;
       using InputFunction = std::function<void(const InputBuffer& inputBuffer)>;
       using OutputFunction = std::function<void(OutputBuffer& outputBuffer)>;
@@ -44,14 +45,15 @@ namespace AudioDevice
       template <typename ClassType>
       void registerAudioLoopFunction(ClassType* instance, void (ClassType::*functionPointer)(const float&));
 
-   protected:
-      virtual void internalCallback(const void* inputBuffer, void* outputBuffer, Frame framesPerBuffer);
+      template <typename ClassType>
+      void registerCallbackOverrideFunction(ClassType* instance, void (ClassType::*functionPointer)(const void*, void*, const Frame&));
 
    private:
       using InputFunctionMap = QMap<Channel, InputFunction>;
       using OutputFunctionMap = QMap<Channel, OutputFunction>;
 
    private:
+      virtual void internalCallback(const void* inputBuffer, void* outputBuffer, const Frame& framesPerBuffer);
       static int portAudioCallback(const void* inputBuffer, void* outputBuffer, Frame framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData);
       void startStream(const PaDeviceIndex& deviceId);
 
@@ -62,6 +64,7 @@ namespace AudioDevice
       float sampleRate;
       Frame framesPerBuffer;
 
+      CallbackOverrideFunction callbackOverride;
       InputFunctionMap inputFunctionMap;
       AudioLoopFunction audioLoopFunction;
       OutputFunctionMap outputFunctionMap;

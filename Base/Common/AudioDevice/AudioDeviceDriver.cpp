@@ -20,6 +20,7 @@ AudioDevice::Driver::Driver(const QString& deviceName, const float& sampleRate, 
    , stream(nullptr)
    , sampleRate(sampleRate)
    , framesPerBuffer(framesPerBuffer)
+   , callbackOverride(nullptr)
    , inputFunctionMap()
    , audioLoopFunction(nullptr)
    , outputFunctionMap()
@@ -177,7 +178,7 @@ void AudioDevice::Driver::registerOutputFunction(OutputFunction outputFunction, 
    outputFunctionMap[channel] = outputFunction;
 }
 
-void AudioDevice::Driver::internalCallback(const void* inputBuffer, void* outputBuffer, Frame framesPerBuffer)
+void AudioDevice::Driver::internalCallback(const void* inputBuffer, void* outputBuffer, const Frame& framesPerBuffer)
 {
    for (int channel = 0; channel < device->maxInputChannels; channel++)
    {
@@ -211,7 +212,12 @@ int AudioDevice::Driver::portAudioCallback(const void* inputBuffer, void* output
 
    Driver* driver = reinterpret_cast<Driver*>(userData);
    if (driver)
-      driver->internalCallback(inputBuffer, outputBuffer, framesPerBuffer);
+   {
+      if (driver->callbackOverride)
+         driver->callbackOverride(inputBuffer, outputBuffer, framesPerBuffer);
+      else
+         driver->internalCallback(inputBuffer, outputBuffer, framesPerBuffer);
+   }
 
    return paContinue;
 }
