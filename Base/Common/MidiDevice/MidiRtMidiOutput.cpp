@@ -34,5 +34,5 @@ QStringList Midi::RtMidi::Output::getAvailable()
 void Midi::RtMidi::Output::sendBuffer(const Bytes& buffer)
 {
    output.sendMessage(&buffer);
-   QThread::msleep(1);
+   QThread::usleep(1000); // estimate is 1 ms per 3 bytes
 }

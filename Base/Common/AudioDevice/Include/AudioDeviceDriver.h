@@ -9,13 +9,13 @@
 namespace AudioDevice
 {
    // A sound interface
-   // Both Gate and CV inputs, as well as outputs only work with a DC coupled interface!
+   // Both Gate and CV poerts (both inputs and outputs) work only with a DC coupled interface!
    class Driver
    {      
    public:
       using AudioLoopFunction = std::function<void(const float& audioCallbackRate)>;
       using InputFunction = std::function<void(const InputBuffer& inputBuffer)>;
-      using OutputFunction = std::function<void(OutputBuffer& inputBuffer)>;
+      using OutputFunction = std::function<void(OutputBuffer& outputBuffer)>;
 
       struct DeviceInfo
       {
@@ -35,6 +35,8 @@ namespace AudioDevice
    public:
       static DeviceInfo::List listDevices();
       const float& getSampleRate() const;
+      const int& getMaxInputChannels() const;
+      const int& getMaxOutputChannels() const;
 
       void registerInputFunction(InputFunction inputFunction, const Channel& channel);
       void registerOutputFunction(OutputFunction outputFunction, const Channel& channel);

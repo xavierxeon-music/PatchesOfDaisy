@@ -157,6 +157,16 @@ const float& AudioDevice::Driver::getSampleRate() const
    return sampleRate;
 }
 
+const int& AudioDevice::Driver::getMaxInputChannels() const
+{
+   return device->maxInputChannels;
+}
+
+const int& AudioDevice::Driver::getMaxOutputChannels() const
+{
+   return device->maxOutputChannels;
+}
+
 void AudioDevice::Driver::registerInputFunction(InputFunction inputFunction, const Channel& channel)
 {
    inputFunctionMap[channel] = inputFunction;
@@ -228,7 +238,10 @@ void AudioDevice::Driver::startStream(const PaDeviceIndex& deviceId)
       outputParameters.suggestedLatency = device->defaultLowOutputLatency;
    }
 
-   PaError result = Pa_OpenStream(&stream, &inputParameters, &outputParameters, sampleRate, framesPerBuffer, paNoFlag, &Driver::portAudioCallback, this);
+   PaStreamParameters* inputParameterPointer = (0 == device->maxInputChannels) ? nullptr : &inputParameters;
+   PaStreamParameters* outputParameterPointer = (0 == device->maxOutputChannels) ? nullptr : &outputParameters;
+
+   PaError result = Pa_OpenStream(&stream, inputParameterPointer, outputParameterPointer, sampleRate, framesPerBuffer, paNoFlag, &Driver::portAudioCallback, this);
    if (paNoError != result)
    {
       qWarning() << "unable to open stream" << Pa_GetErrorText(result);
