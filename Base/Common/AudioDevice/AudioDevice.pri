@@ -1,3 +1,8 @@
+win32 {
+    system($$PWD/portaudio/build.bat) # will exit if already built
+    LIBS += -L$$PWD/portaudio/install/lib -lportaudio
+}
+
 unix {
     system($$PWD/portaudio/build.sh) # will exit if already built
     LIBS += -L$$PWD/portaudio/install/lib -lportaudio
