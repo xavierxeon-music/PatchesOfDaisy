@@ -26,15 +26,16 @@ namespace AudioDevice
 
          DeviceInfo(const QString& name, const float& defaultSampleRate);
 
-         using List = QList<DeviceInfo>;
+         using Map = QMap<PaDeviceIndex, DeviceInfo>;
       };
 
    public:
+      // leave deviceName empty for default device
       Driver(const QString& deviceName, const float& sampleRate = Common::SampleRate::Default, const Frame& framesPerBuffer = 0);
       virtual ~Driver();
 
    public:
-      static DeviceInfo::List listDevices();
+      static DeviceInfo::Map listDevices();
       const float& getSampleRate() const;
       const int& getMaxInputChannels() const;
       const int& getMaxOutputChannels() const;

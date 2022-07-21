@@ -53,10 +53,21 @@ AudioDevice::Driver::Driver(const QString& deviceName, const float& sampleRate, 
    {
       qWarning() << "unable to find device" << deviceName;
       qInfo() << "available devices (with default rate in CAPITAL) are:";
-      for (const DeviceInfo& info : listDevices())
+      const PaDeviceIndex defaultDeviceId = Pa_GetDefaultOutputDevice();
+      const DeviceInfo::Map devices = listDevices();
+      for (DeviceInfo::Map::const_iterator it = devices.constBegin(); it != devices.constEnd(); it++)
       {
+         const DeviceInfo& info = it.value();
+
          auto stream = qInfo();
-         stream << " * " << qPrintable(info.name) << ", sample rates [";
+         if (defaultDeviceId == it.key() && deviceName.isEmpty())
+         {
+            stream << " @ ";
+            deviceId = defaultDeviceId;
+         }
+         else
+            stream << " * ";
+         stream << qPrintable(info.name) << ", sample rates [";
 
          for (Common::SampleRate::BoolMap::const_iterator it = info.supportedSampleRates.constBegin(); it != info.supportedSampleRates.constEnd(); it++)
          {
@@ -73,9 +84,10 @@ AudioDevice::Driver::Driver(const QString& deviceName, const float& sampleRate, 
          }
          stream << "]";
       }
-
-      return;
    }
+
+   if (-1 == deviceId) // device not found
+      return;
 
    if (Common::SampleRate::Default == sampleRate)
       this->sampleRate = device->defaultSampleRate;
@@ -100,9 +112,9 @@ AudioDevice::Driver::~Driver()
       Pa_Terminate();
 }
 
-AudioDevice::Driver::DeviceInfo::List AudioDevice::Driver::listDevices()
+AudioDevice::Driver::DeviceInfo::Map AudioDevice::Driver::listDevices()
 {
-   DeviceInfo::List devices;
+   DeviceInfo::Map devices;
    if (0 == useCount) // local init
    {
       if (paNoError != Pa_Initialize())
@@ -144,7 +156,7 @@ AudioDevice::Driver::DeviceInfo::List AudioDevice::Driver::listDevices()
       testSampleRate(Common::SampleRate::Normal);
       testSampleRate(Common::SampleRate::High);
 
-      devices.append(info);
+      devices.insert(index, info);
    }
 
    if (0 == useCount) // local deinit
