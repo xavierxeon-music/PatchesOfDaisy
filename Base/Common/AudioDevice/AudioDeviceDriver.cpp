@@ -45,49 +45,19 @@ AudioDevice::Driver::Driver(const QString& deviceName, const float& sampleRate, 
          continue;
 
       deviceId = index;
-      device = testInfo;
       break;
    }
 
    if (-1 == deviceId)
+      deviceId = getDefaultDevice();
+
+   if (-1 == deviceId)
    {
-      qWarning() << "unable to find device" << deviceName;
-      qInfo() << "available devices (with default rate in CAPITAL) are:";
-      const PaDeviceIndex defaultDeviceId = Pa_GetDefaultOutputDevice();
-      const DeviceInfo::Map devices = listDevices();
-      for (DeviceInfo::Map::const_iterator it = devices.constBegin(); it != devices.constEnd(); it++)
-      {
-         const DeviceInfo& info = it.value();
-
-         auto stream = qInfo();
-         if (defaultDeviceId == it.key() && deviceName.isEmpty())
-         {
-            stream << " @ ";
-            deviceId = defaultDeviceId;
-         }
-         else
-            stream << " * ";
-         stream << qPrintable(info.name) << ", sample rates [";
-
-         for (Common::SampleRate::BoolMap::const_iterator it = info.supportedSampleRates.constBegin(); it != info.supportedSampleRates.constEnd(); it++)
-         {
-            const bool supported = it.value();
-            if (!supported)
-               continue;
-
-            const bool isDefault = (it.key() == info.defaultSampleRate);
-            const QString name = Common::SampleRate::nameMap[it.key()];
-            if (isDefault)
-               stream << qPrintable(name.toUpper());
-            else
-               stream << qPrintable(name.toLower());
-         }
-         stream << "]";
-      }
+      printDevices();
+      return;
    }
 
-   if (-1 == deviceId) // device not found
-      return;
+   device = Pa_GetDeviceInfo(deviceId);
 
    if (Common::SampleRate::Default == sampleRate)
       this->sampleRate = device->defaultSampleRate;
@@ -276,4 +246,74 @@ void AudioDevice::Driver::startStream(const PaDeviceIndex& deviceId)
    }
 
    qInfo() << "opened audio device" << device->name;
+}
+
+PaDeviceIndex AudioDevice::Driver::getDefaultDevice() const
+{
+   const PaDeviceIndex deviceId = Pa_GetDefaultOutputDevice();
+   const DeviceInfo::Map devices = listDevices();
+
+   for (DeviceInfo::Map::const_iterator it = devices.constBegin(); it != devices.constEnd(); it++)
+   {
+      if (deviceId != it.key())
+         continue;
+
+      const DeviceInfo& info = it.value();
+
+      auto stream = qInfo();
+      stream << "use default device";
+      stream << qPrintable(info.name);
+      stream << "with sample rate";
+      for (Common::SampleRate::BoolMap::const_iterator it = info.supportedSampleRates.constBegin(); it != info.supportedSampleRates.constEnd(); it++)
+      {
+         const bool supported = it.value();
+         if (!supported)
+            continue;
+
+         const bool isDefault = (it.key() == info.defaultSampleRate);
+         const QString name = Common::SampleRate::nameMap[it.key()];
+         if (isDefault)
+            stream << qPrintable(name.toUpper());
+      }
+
+      break;
+   }
+
+   return deviceId;
+}
+
+void AudioDevice::Driver::printDevices() const
+{
+   qInfo() << "available devices (with default rate in CAPITAL) are:";
+
+   const PaDeviceIndex defaultDeviceId = Pa_GetDefaultOutputDevice();
+
+   const DeviceInfo::Map devices = listDevices();
+   for (DeviceInfo::Map::const_iterator it = devices.constBegin(); it != devices.constEnd(); it++)
+   {
+      const DeviceInfo& info = it.value();
+
+      auto stream = qInfo();
+      if (defaultDeviceId == it.key())
+         stream << " @ ";
+      else
+         stream << " * ";
+      stream << qPrintable(info.name);
+      stream << ", sample rates [";
+
+      for (Common::SampleRate::BoolMap::const_iterator it = info.supportedSampleRates.constBegin(); it != info.supportedSampleRates.constEnd(); it++)
+      {
+         const bool supported = it.value();
+         if (!supported)
+            continue;
+
+         const bool isDefault = (it.key() == info.defaultSampleRate);
+         const QString name = Common::SampleRate::nameMap[it.key()];
+         if (isDefault)
+            stream << qPrintable(name.toUpper());
+         else
+            stream << qPrintable(name.toLower());
+      }
+      stream << "]";
+   }
 }

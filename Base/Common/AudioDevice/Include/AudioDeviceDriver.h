@@ -31,7 +31,7 @@ namespace AudioDevice
 
    public:
       // leave deviceName empty for default device
-      Driver(const QString& deviceName, const float& sampleRate = Common::SampleRate::Default, const Frame& framesPerBuffer = 0);
+      Driver(const QString& deviceName = QString(), const float& sampleRate = Common::SampleRate::Default, const Frame& framesPerBuffer = 0);
       virtual ~Driver();
 
    public:
@@ -57,6 +57,8 @@ namespace AudioDevice
       virtual void internalCallback(const void* inputBuffer, void* outputBuffer, const Frame& framesPerBuffer);
       static int portAudioCallback(const void* inputBuffer, void* outputBuffer, Frame framesPerBuffer, const PaStreamCallbackTimeInfo* timeInfo, PaStreamCallbackFlags statusFlags, void* userData);
       void startStream(const PaDeviceIndex& deviceId);
+      PaDeviceIndex getDefaultDevice() const;
+      void printDevices() const;
 
    private:
       static uint useCount;
