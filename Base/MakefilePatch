@@ -18,9 +18,11 @@ CPP_SOURCES += \
  	$(BASE_DIR)/PatchDevice/AbstractSettings.cpp  \
 	$(BASE_DIR)/PatchDevice/Timer.cpp \
 	$(BASE_DIR)/Common/MusicTools/AbstractEffect.cpp \
-	$(BASE_DIR)/Common/MusicTools/AbstractOscilator.cpp \
-	$(BASE_DIR)/Common/MusicTools/Maths.cpp \
-	$(BASE_DIR)/Common/MusicTools/Note.cpp  \
+   $(BASE_DIR)/Common/MusicTools/AbstractOscilator.cpp \
+   $(BASE_DIR)/Common/MusicTools/AbstractSoundSource.cpp \
+   $(BASE_DIR)/Common/MusicTools/Maths.cpp \
+   $(BASE_DIR)/Common/MusicTools/Note.cpp \
+   $(BASE_DIR)/Common/MusicTools/Spectrum.cpp \
 	$(BASE_DIR)/Common/Remember/RememberInterface.cpp \
 	$(BASE_DIR)/Common/Remember/RememberRoot.cpp  
 
