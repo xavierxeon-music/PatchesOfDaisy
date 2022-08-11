@@ -31,12 +31,15 @@
 [submodule "Projects/Project_WaveBlender"]
 	path = Projects/WaveBlender
 	url = https://github.com/xavierxeon-music/Project_WaveBlender.git
-[submodule "Projects/Project_TimeLord"]
-	path = Projects/TimeLord
-	url = https://github.com/xavierxeon-music/Project_TimeLord.git
 [submodule "Projects/Project_Harmonizer"]
 	path = Projects/Harmonizer
 	url = https://github.com/xavierxeon-music/Project_Harmonizer.git
 [submodule "Projects/Project_Mesh"]
 	path = Projects/Mesh
 	url = https://github.com/xavierxeon-music/Project_Mesh.git
+[submodule "Applications/Trittbrettfahrer"]
+	path = Applications/Trittbrettfahrer
+	url = https://github.com/xavierxeon-apps/Trittbrettfahrer.git
+[submodule "Applications/TimeLordUI"]
+	path = Applications/TimeLordUI
+	url = https://github.com/xavierxeon-music/TimeLordUI.git
