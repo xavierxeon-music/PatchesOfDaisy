@@ -23,9 +23,9 @@ void Midi::Tool::Bridge::pushToRemote()
       return;
 
    Remember::DataVector data = root->get();
-   Bytes dataBase64 = SevenBit::encode(data);
+   std::string dataBase64 = SevenBit::encode(data);
 
-   for (const uint8_t byte : dataBase64)
+   for (const char& byte : dataBase64)
       output->sendControllerChange(remoteChannel, ControllerMessage::RememberBlock, byte);
 
    output->sendControllerChange(remoteChannel, ControllerMessage::RememberApply, 0);
@@ -33,14 +33,14 @@ void Midi::Tool::Bridge::pushToRemote()
 
 void Midi::Tool::Bridge::checkRequests(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
 {
-   static Bytes buffer;
+   static std::string buffer;
 
    if (channel != myChannel)
       return;
 
    if (ControllerMessage::RememberBlock == controllerMessage)
    {
-      buffer << value;
+      buffer += value;
    }
    else if (ControllerMessage::RememberApply == controllerMessage)
    {
