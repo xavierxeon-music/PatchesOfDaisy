@@ -7,9 +7,6 @@
 [submodule "Base/Common/JSONTools"]
 	path = Base/Common/JSONTools
 	url = https://github.com/xavierxeon-helper/JSONTools.git
-[submodule "Base/Common/AudioDevice/portaudio"]
-	path = Base/Common/AudioDevice/portaudio/source
-	url = https://github.com/PortAudio/portaudio.git
 [submodule "base/libDaisy"]
 	path = Base/libDaisy
 	url = https://github.com/electro-smith/libDaisy.git
