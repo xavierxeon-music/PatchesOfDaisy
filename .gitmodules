@@ -46,3 +46,6 @@
 [submodule "AudioDevice"]
 	path = Base/Common/AudioDevice
 	url = https://github.com/xavierxeon-music/AudioDevice.git
+[submodule "Applications/Tracker"]
+	path = Applications/Tracker
+	url = https://github.com/xavierxeon-music/Tracker.git
