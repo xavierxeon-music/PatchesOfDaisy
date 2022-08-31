@@ -37,9 +37,6 @@
 [submodule "Applications/Trittbrettfahrer"]
 	path = Applications/Trittbrettfahrer
 	url = https://github.com/xavierxeon-apps/Trittbrettfahrer.git
-[submodule "Applications/TimeLordUI"]
-	path = Applications/TimeLordUI
-	url = https://github.com/xavierxeon-music/TimeLordUI.git
 [submodule "Base/Common/MidiDevice"]
 	path = Base/Common/MidiDevice
 	url = https://github.com/xavierxeon-music/MidiDevice.git
