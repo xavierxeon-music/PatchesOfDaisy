@@ -43,7 +43,7 @@
 [submodule "Base/Common/MidiDevice"]
 	path = Base/Common/MidiDevice
 	url = https://github.com/xavierxeon-music/MidiDevice.git
-[submodule "AudioDevice"]
+[submodule "Base/Common/AudioDevice"]
 	path = Base/Common/AudioDevice
 	url = https://github.com/xavierxeon-music/AudioDevice.git
 [submodule "Applications/Tracker"]
