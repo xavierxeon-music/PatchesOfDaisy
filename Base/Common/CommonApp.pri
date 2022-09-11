@@ -6,12 +6,14 @@ HEADERS += \
    $$PWD/AppSettings.h \
    $$PWD/ConsoleApplication.h \
    $$PWD/FileSettings.h \
+   $$PWD/HubClient.h \
    $$PWD/RootStorage.h
 
 SOURCES += \
    $$PWD/AppSettings.cpp \
    $$PWD/ConsoleApplication.cpp \
    $$PWD/FileSettings.cpp \
+   $$PWD/HubClient.cpp \
    $$PWD/RootStorage.cpp
 
 CONFIG(midi):include($$PWD/MidiDevice/MidiDevice.pri)
