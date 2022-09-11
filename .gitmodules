@@ -34,9 +34,6 @@
 [submodule "Projects/Project_Mesh"]
 	path = Projects/Mesh
 	url = https://github.com/xavierxeon-music/Project_Mesh.git
-[submodule "Applications/Trittbrettfahrer"]
-	path = Applications/Trittbrettfahrer
-	url = https://github.com/xavierxeon-apps/Trittbrettfahrer.git
 [submodule "Base/Common/MidiDevice"]
 	path = Base/Common/MidiDevice
 	url = https://github.com/xavierxeon-music/MidiDevice.git
@@ -46,3 +43,6 @@
 [submodule "Applications/Tracker"]
 	path = Applications/Tracker
 	url = https://github.com/xavierxeon-music/Tracker.git
+[submodule "Applications/HubVCV"]
+	path = Applications/HubVCV
+	url = https://github.com/xavierxeon-music/HubVCV.git
