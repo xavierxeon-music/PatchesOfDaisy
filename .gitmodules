@@ -40,9 +40,9 @@
 [submodule "Base/Common/AudioDevice"]
 	path = Base/Common/AudioDevice
 	url = https://github.com/xavierxeon-music/AudioDevice.git
-[submodule "Applications/Tracker"]
-	path = Applications/Tracker
-	url = https://github.com/xavierxeon-music/Tracker.git
 [submodule "Applications/HubVCV"]
 	path = Applications/HubVCV
 	url = https://github.com/xavierxeon-music/HubVCV.git
+[submodule "Applications/Maestro"]
+	path = Applications/Maestro
+	url = https://github.com/xavierxeon-music/Maestro.git
