@@ -6,13 +6,13 @@ static const QString portName = "Daisy Seed Built In";
 
 Imposter::MidiUsbHandler::MidiUsbHandler()
    : QObject(nullptr)
-   , input(this, portName)
-   , output(this, portName)
+   , input(portName)
+   , output(portName)
    , eventList()
 {
    input.onNoteOn(this, &MidiUsbHandler::noteOn);
    input.onNoteOff(this, &MidiUsbHandler::noteOff);
-   input.onControllChange(this, &MidiUsbHandler::controllChange);
+   input.onControllerChange(this, &MidiUsbHandler::controllerChange);
 
    input.open();
    output.open();
@@ -76,7 +76,7 @@ void Imposter::MidiUsbHandler::noteOff(const Midi::Channel& channel, const Note&
    eventList.append(event);
 }
 
-void Imposter::MidiUsbHandler::controllChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
+void Imposter::MidiUsbHandler::controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value)
 {
    MidiEvent event;
    event.type = ControlChange;

@@ -45,6 +45,5 @@ SOURCES += \
    $$PWD/AbstractPageOverlay.cpp \
    $$PWD/AbstractPatch.cpp \
    $$PWD/AbstractSettings.cpp \
-   $$PWD/LogFile.cpp \
    $$PWD/SDCard.cpp \
    $$PWD/Timer.cpp

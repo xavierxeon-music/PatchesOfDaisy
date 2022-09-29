@@ -8,7 +8,7 @@
 
 #include <Music/Note.h>
 #include <Sound/StandardTable.h>
-#include <Sound/WaveTable.h>
+#include <Sound/WaveTableOscilator.h>
 
 namespace Imposter
 {
@@ -22,6 +22,7 @@ namespace AudioChannel
       Q_OBJECT
    public:
       Input();
+
    public:
       void init(Imposter::DaisyPatch* imposterPatch);
       Buffer process(const uint64_t& blockSize);
@@ -35,7 +36,7 @@ namespace AudioChannel
    private:
       Imposter::DaisyPatch* imposterPatch;
       QLabel* oscilatorLabel;
-      Note note;
+      float frequency;
       Standard::Waveform::Shape waveform;
       Standard::Table table;
       WaveTable::Oscilator oscilator;

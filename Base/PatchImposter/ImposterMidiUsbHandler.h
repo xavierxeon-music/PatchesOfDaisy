@@ -27,7 +27,7 @@ namespace Imposter
    private:
       void noteOn(const Midi::Channel& channel, const Note& note, const Midi::Velocity& velocity);
       void noteOff(const Midi::Channel& channel, const Note& note);
-      void controllChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value);
+      void controllerChange(const Midi::Channel& channel, const Midi::ControllerMessage& controllerMessage, const uint8_t& value);
 
    private:
       Midi::Virtual::Input input;

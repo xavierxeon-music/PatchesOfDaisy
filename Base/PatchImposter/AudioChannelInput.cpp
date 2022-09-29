@@ -6,7 +6,7 @@ AudioChannel::Input::Input()
    : Abstract()
    , imposterPatch(nullptr)
    , oscilatorLabel(nullptr)
-   , note(Note::zeroNote)
+   , frequency(0)
    , waveform(Standard::Waveform::Sine)
    , table()
    , oscilator()
@@ -47,9 +47,9 @@ void AudioChannel::Input::setRemote(const Note& newNote, const Standard::Wavefor
       updateOscilator();
    }
 
-   if (note.frequency != newNote.frequency)
+   if (frequency != newNote.frequency)
    {
-      note = newNote;
+      frequency = newNote.frequency;
       updateOscilator();
    }
 }
@@ -57,11 +57,11 @@ void AudioChannel::Input::setRemote(const Note& newNote, const Standard::Wavefor
 void AudioChannel::Input::updateOscilator()
 {
    table.setWaveform(waveform);
-   oscilator.setFrequency(note.frequency);
+   oscilator.setFrequency(frequency);
 
    if (oscilatorLabel)
    {
-      const std::string text = note.name + " [" + Standard::Waveform::getName(waveform) + "]";
+      const std::string text = Note::fromFrequency(frequency).name + " [" + Standard::Waveform::getName(waveform) + "]";
       oscilatorLabel->setText(QString::fromStdString(text));
    }
 }

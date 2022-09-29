@@ -78,10 +78,10 @@ void Midi::Handler::Base::handleMidiMessage(MidiEvent event)
          ControlChangeEvent controlChange = event.AsControlChange();
          ControllerMessage message = static_cast<ControllerMessage>(controlChange.control_number);
 
-         if (!controllChangeFunctionList.empty() && receiveChannel == controlChange.channel)
+         if (!controllerChangeFunctionList.empty() && receiveChannel == controlChange.channel)
          {
-            for (const ControllChangeFunction& controllChangeFunction : controllChangeFunctionList)
-               controllChangeFunction(controlChange.channel, message, controlChange.value);
+            for (const ControllerChangeFunction& controllerChangeFunction : controllerChangeFunctionList)
+               controllerChangeFunction(controlChange.channel, message, controlChange.value);
          }
 
          if (passThroughHandler)
