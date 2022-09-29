@@ -6,6 +6,7 @@ C_INCLUDES += \
 	-I$(BASE_DIR)/PatchDevice/Include \
 	-I$(BASE_DIR)/Common/MusicTools \
 	-I$(BASE_DIR)/Common/MusicTools/Include \
+	-I$(BASE_DIR)/Common/MusicTools/Memory \
 	-I$(BASE_DIR)/Common/Remember
 
 # Sources
@@ -21,7 +22,8 @@ CPP_SOURCES += \
    $(BASE_DIR)/Common/MusicTools/AbstractOscilator.cpp \
    $(BASE_DIR)/Common/MusicTools/AbstractSoundSource.cpp \
    $(BASE_DIR)/Common/MusicTools/Maths.cpp \
-   $(BASE_DIR)/Common/MusicTools/Note.cpp \
+   $(BASE_DIR)/Common/MusicTools/Memory/MemoryManager.cpp \
+	$(BASE_DIR)/Common/MusicTools/Note.cpp \
    $(BASE_DIR)/Common/MusicTools/Spectrum.cpp \
 	$(BASE_DIR)/Common/Remember/RememberInterface.cpp \
 	$(BASE_DIR)/Common/Remember/RememberRoot.cpp  
