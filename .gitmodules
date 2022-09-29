@@ -46,3 +46,6 @@
 [submodule "Applications/Maestro"]
 	path = Applications/Maestro
 	url = https://github.com/xavierxeon-music/Maestro.git
+[submodule "Applications/GateKeeper"]
+	path = Applications/GateKeeper
+	url = https://github.com/xavierxeon-music/GateKeeper.git
