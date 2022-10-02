@@ -4,6 +4,7 @@ PRECOMPILED_HEADER += $$PWD/Global.h
 
 HEADERS += \
    $$PWD/AppSettings.h \
+   $$PWD/ColorPicker.h \
    $$PWD/ConsoleApplication.h \
    $$PWD/FileSettings.h \
    $$PWD/HubClient.h \
@@ -11,6 +12,7 @@ HEADERS += \
 
 SOURCES += \
    $$PWD/AppSettings.cpp \
+   $$PWD/ColorPicker.cpp \
    $$PWD/ConsoleApplication.cpp \
    $$PWD/FileSettings.cpp \
    $$PWD/HubClient.cpp \
