@@ -15,7 +15,7 @@ It now also features:
 
 ## Hardware
 
- * excute scripts Tools/install/toolchain.sh 
+ * use installer from daisy wiki
  * build libdaisy with Base/build_libdaisy.sh (only if you want to deploy to seed hardware)
 
 ## PatchImposter (Qt GUI to test programs)
