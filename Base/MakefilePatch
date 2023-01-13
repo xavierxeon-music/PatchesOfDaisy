@@ -27,7 +27,6 @@ CPP_SOURCES += \
 	$(BASE_DIR)/Common/MusicTools/Maths.cpp \
 	$(BASE_DIR)/Common/MusicTools/Note.cpp \
 	$(BASE_DIR)/Common/MusicTools/Spectrum.cpp \
-	$(BASE_DIR)/Common/MusicTools/Memory/MemoryManager.cpp \
 	$(BASE_DIR)/Common/Remember/RememberInterface.cpp \
 	$(BASE_DIR)/Common/Remember/RememberRoot.cpp  
 
