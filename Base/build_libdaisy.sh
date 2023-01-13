@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION=v4.0.0
+VERSION=v5.3.0
 
 START_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" >/dev/null && pwd )"   
 LIBDAISY_DIR=$START_DIR/libDaisy
@@ -24,4 +24,4 @@ fi
 make | grep "warning:r\|error" ;
 echo "done."
 
-git switch master
+
