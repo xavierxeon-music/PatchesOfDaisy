@@ -40,3 +40,6 @@
 [submodule "Projects/Project_Schaltzentrale"]
 	path = Projects/Schaltzentrale
 	url = https://github.com/xavierxeon-music/Project_Schaltzentrale.git
+[submodule "AudioDevice"]
+	path = Base/Common/AudioDevice
+	url = https://github.com/xavierxeon-music/AudioDevice.git
