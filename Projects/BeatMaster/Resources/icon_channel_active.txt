@@ -1,0 +1,12 @@
+------------
+--xxxxxxxx--
+-xxxxxxxxxx-
+-xx------xx-
+-xx--xx--xx-
+-xx--xx--xx-
+-xx--xx--xx-
+-xx--xx--xx-
+-xx------xx-
+-xxxxxxxxxx-
+--xxxxxxxx--
+------------
