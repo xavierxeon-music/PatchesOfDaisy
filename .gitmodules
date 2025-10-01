@@ -1,18 +1,18 @@
 [submodule "Base/MusicTools"]
 	path = Base/Common/MusicTools
-	url = https://github.com/xavierxeon-music/MusicTools.git
+	url = git@github.com:xavierxeon-music/MusicTools.git
 [submodule "Base/Remember"]
 	path = Base/Common/Remember
-	url = https://github.com/xavierxeon-helper/Remember.git
+	url = git@github.com:xavierxeon-helper/Remember.git
 [submodule "Base/Common/JSONTools"]
 	path = Base/Common/JSONTools
-	url = https://github.com/xavierxeon-helper/JSONTools.git
+	url = git@github.com:xavierxeon-helper/JSONTools.git
 [submodule "base/libDaisy"]
 	path = Base/libDaisy
-	url = https://github.com/electro-smith/libDaisy.git
+	url = git@github.com:electro-smith/libDaisy.git
 [submodule "Base/Common/MidiDevice"]
 	path = Base/Common/MidiDevice
-	url = https://github.com/xavierxeon-music/MidiDevice.git
+	url = git@github.com:xavierxeon-music/MidiDevice.git
 [submodule "AudioDevice"]
 	path = Base/Common/AudioDevice
-	url = https://github.com/xavierxeon-music/AudioDevice.git
+	url = git@github.com:xavierxeon-music/AudioDevice.git
